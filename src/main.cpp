@@ -1,3 +1,11 @@
-//
-// Created by Ruben on 6/14/2021.
-//
+#include "MainWindow.h"
+#include <QApplication>
+
+int main(int argc, char** argv) {
+    QApplication a(argc, argv);
+
+    MainWindow w;
+    w.show();
+
+    return QApplication::exec();
+}
