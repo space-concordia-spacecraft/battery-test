@@ -112,9 +112,12 @@ void loop() {
          
     if(command.equals("charge_a")){
       chargeCellA(true);
-    }
-    else if(command.equals("charge_b")){
+    } else if(command.equals("charge_b")){
       chargeCellB(true);
+    } else if(command.equals("discharge_a")){
+      chargeCellA(false);
+    } else if(command.equals("discharge_b")){
+      chargeCellB(false);
     }
   }
 }
