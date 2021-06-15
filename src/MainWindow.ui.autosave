@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>823</width>
-    <height>560</height>
+    <height>521</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
       <x>10</x>
       <y>10</y>
       <width>801</width>
-      <height>541</height>
+      <height>501</height>
      </rect>
     </property>
     <property name="font">
@@ -48,7 +48,7 @@
       <property name="geometry">
        <rect>
         <x>580</x>
-        <y>100</y>
+        <y>90</y>
         <width>121</width>
         <height>51</height>
        </rect>
@@ -115,9 +115,9 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>340</y>
+        <y>320</y>
         <width>751</width>
-        <height>141</height>
+        <height>131</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -133,7 +133,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>20</y>
+         <y>10</y>
          <width>711</width>
          <height>107</height>
         </rect>
@@ -306,7 +306,7 @@
         <x>20</x>
         <y>20</y>
         <width>531</width>
-        <height>141</height>
+        <height>131</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -322,7 +322,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>20</y>
+         <y>10</y>
          <width>491</width>
          <height>105</height>
         </rect>
@@ -415,9 +415,9 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>180</y>
+        <y>170</y>
         <width>751</width>
-        <height>141</height>
+        <height>131</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -433,7 +433,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>20</y>
+         <y>10</y>
          <width>711</width>
          <height>107</height>
         </rect>
