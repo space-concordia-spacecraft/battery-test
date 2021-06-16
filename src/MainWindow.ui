@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>823</width>
-    <height>560</height>
+    <height>521</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,7 +26,7 @@
       <x>10</x>
       <y>10</y>
       <width>801</width>
-      <height>541</height>
+      <height>501</height>
      </rect>
     </property>
     <property name="font">
@@ -48,7 +48,7 @@
       <property name="geometry">
        <rect>
         <x>580</x>
-        <y>100</y>
+        <y>90</y>
         <width>121</width>
         <height>51</height>
        </rect>
@@ -115,9 +115,9 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>340</y>
+        <y>320</y>
         <width>751</width>
-        <height>141</height>
+        <height>131</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -133,7 +133,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>20</y>
+         <y>10</y>
          <width>711</width>
          <height>107</height>
         </rect>
@@ -166,7 +166,7 @@
         <item>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="1" column="2">
-           <widget class="QLabel" name="label_21">
+           <widget class="QLabel" name="cell_b_temperature">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
@@ -192,7 +192,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLabel" name="label_26">
+           <widget class="QLabel" name="cell_b_current">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
@@ -206,7 +206,7 @@
            </widget>
           </item>
           <item row="1" column="3">
-           <widget class="QLabel" name="label_27">
+           <widget class="QLabel" name="cell_b_charge">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
@@ -256,7 +256,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_23">
+           <widget class="QLabel" name="cell_b_voltage">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
@@ -282,7 +282,7 @@
            </widget>
           </item>
           <item row="1" column="4">
-           <widget class="QLabel" name="label_36">
+           <widget class="QLabel" name="cell_b_stage">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
@@ -306,7 +306,7 @@
         <x>20</x>
         <y>20</y>
         <width>531</width>
-        <height>141</height>
+        <height>131</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -322,7 +322,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>20</y>
+         <y>10</y>
          <width>491</width>
          <height>105</height>
         </rect>
@@ -355,7 +355,7 @@
         <item>
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="1" column="0">
-           <widget class="QLabel" name="label_37">
+           <widget class="QLabel" name="time_elapsed">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
@@ -381,7 +381,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLabel" name="label_44">
+           <widget class="QLabel" name="progress">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
@@ -402,7 +402,7 @@
              </font>
             </property>
             <property name="text">
-             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#073051;&quot;&gt;Loops&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#073051;&quot;&gt;Progress&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -415,9 +415,9 @@
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>180</y>
+        <y>170</y>
         <width>751</width>
-        <height>141</height>
+        <height>131</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -433,7 +433,7 @@
        <property name="geometry">
         <rect>
          <x>20</x>
-         <y>20</y>
+         <y>10</y>
          <width>711</width>
          <height>107</height>
         </rect>
@@ -466,7 +466,7 @@
         <item>
          <layout class="QGridLayout" name="gridLayout_3">
           <item row="0" column="2">
-           <widget class="QLabel" name="label_29">
+           <widget class="QLabel" name="cell_a_temperature_title">
             <property name="font">
              <font>
               <pointsize>14</pointsize>
@@ -478,7 +478,7 @@
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QLabel" name="label_14">
+           <widget class="QLabel" name="cell_a_voltage_title">
             <property name="font">
              <font>
               <pointsize>14</pointsize>
@@ -490,7 +490,7 @@
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QLabel" name="label_28">
+           <widget class="QLabel" name="cell_a_temperature">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
@@ -504,7 +504,7 @@
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLabel" name="label_33">
+           <widget class="QLabel" name="cell_a_current">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
@@ -518,7 +518,7 @@
            </widget>
           </item>
           <item row="0" column="3">
-           <widget class="QLabel" name="label_32">
+           <widget class="QLabel" name="cell_a_charge_title">
             <property name="font">
              <font>
               <pointsize>14</pointsize>
@@ -530,7 +530,7 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QLabel" name="label_30">
+           <widget class="QLabel" name="cell_a_voltage">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
@@ -544,7 +544,7 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLabel" name="label_31">
+           <widget class="QLabel" name="cell_a_current_title">
             <property name="font">
              <font>
               <pointsize>14</pointsize>
@@ -556,7 +556,7 @@
            </widget>
           </item>
           <item row="1" column="3">
-           <widget class="QLabel" name="label_34">
+           <widget class="QLabel" name="cell_a_charge">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
@@ -570,7 +570,7 @@
            </widget>
           </item>
           <item row="0" column="4">
-           <widget class="QLabel" name="label_17">
+           <widget class="QLabel" name="cell_a_stage_title">
             <property name="font">
              <font>
               <pointsize>14</pointsize>
@@ -582,7 +582,7 @@
            </widget>
           </item>
           <item row="1" column="4">
-           <widget class="QLabel" name="label_35">
+           <widget class="QLabel" name="cell_a_stage">
             <property name="font">
              <font>
               <pointsize>20</pointsize>
