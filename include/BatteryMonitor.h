@@ -1,11 +1,14 @@
 #pragma once
+
 #include "Battery.h"
-#include "SerialPort.h"
+#include "SerialReceiver.h"
 
-class BatteryMonitor {
+class BatteryMonitor : SerialListener {
 
-    Battery batteryA{}, batteryB{};
+public:
+    virtual void OnReceive(SerialData data) const override final;
 
-    BatteryMonitor();
-    void parseData();
+private:
+    Battery m_BatteryA{}, m_BatteryB{};
+
 };

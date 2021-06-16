@@ -3,10 +3,12 @@
 #include <thread>
 #include <string>
 #include <vector>
+#include <iostream>
 
 #include "SerialPort.h"
 
 #define SERIAL_DELIMITER ","
+#define SERIAL_DELIMITER_LEN 1
 
 using std::thread;
 using std::string;
@@ -37,6 +39,8 @@ public:
 class SerialReceiver {
 
 public:
+    explicit SerialReceiver(const char* port = R"(\\.\COM4)");
+
     void SetArduinoPort(const char* port);
     void SetListener(const SerialListener * listener);
 
@@ -48,6 +52,6 @@ private:
     SerialPort m_ArduinoPort;
     const SerialListener * m_Listener = nullptr;
     thread m_Thread;
-    bool m_Running = false;
+    volatile bool m_Running = false;
 
 };

@@ -25,4 +25,4 @@ add_executable("Battery" ${BATTERY_SRC})
 
 # Link the needed libraries along with the executable
 target_link_libraries("Battery" PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets)
-target_include_directories("Battery" PRIVATE include)
+target_include_directories("Battery" PRIVATE include ${CMAKE_CURRENT_BINARY_DIR})

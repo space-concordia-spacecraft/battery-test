@@ -1,6 +1,9 @@
 #include "SerialReceiver.h"
 
 
+SerialReceiver::SerialReceiver(const char* port)
+    : m_ArduinoPort(port) {}
+
 void SerialReceiver::SetArduinoPort(const char* port) {
     m_ArduinoPort = SerialPort(port);
 }
@@ -10,13 +13,13 @@ void SerialReceiver::SetListener(const SerialListener * listener) {
 }
 
 void SerialReceiver::Start() {
-    m_Thread = thread(&SerialReceiver::Run, this);
     m_Running = true;
+    m_Thread = thread(&SerialReceiver::Run, this);
 }
 
 void SerialReceiver::Stop() {
-    m_Thread.join();
     m_Running = false;
+    m_Thread.join();
 }
 
 void SerialReceiver::Run() {
@@ -33,7 +36,7 @@ void SerialReceiver::Run() {
             auto delimiterIndex = string::npos;
             while ((delimiterIndex = serialStr.find(SERIAL_DELIMITER)) != string::npos) {
                 tokens.emplace_back(serialStr.substr(0, delimiterIndex));
-                serialStr = serialStr.substr(delimiterIndex + 1);
+                serialStr = serialStr.substr(delimiterIndex + SERIAL_DELIMITER_LEN);
             }
 
             // Create and pass data struct
