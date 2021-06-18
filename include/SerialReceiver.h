@@ -36,7 +36,7 @@ union SerialData {
 
 class SerialListener {
 public:
-    virtual void OnReceive(SerialData data) const = 0;
+    virtual void OnReceive(SerialData data) = 0;
 };
 
 class SerialReceiver {

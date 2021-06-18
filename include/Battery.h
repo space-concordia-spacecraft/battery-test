@@ -1,6 +1,10 @@
 #pragma once
 
+#include "Utils.h"
+
 struct Battery {
+
+private:
     // Charge, Discharge, Charge, Discharge, Charge
     const int CHARGE1 = 0;
     const int IDLE1 = 1;
@@ -12,15 +16,51 @@ struct Battery {
     const int IDLE4 = 7;
     const int CHARGE3 = 8;
 
-    int currentState = CHARGE1;
+    int m_CurrentState = CHARGE1;
 
-    float temp, voltage, current;
+    float m_Temperature, m_Voltage, m_Current, m_idleCurrent;
 
+    std::vector<float> m_TemperatureValue = { -10, 0, 10, 20, 30, 40, 50, 60 };
+    std::vector<float> m_TemperatureVolts = { 1.766, 1.405, 1.065, 0.779, 0.558, 0.395, 0.280, 0.200 };
+
+public:
     bool isCharging() {
-        return current > 0;
+        return m_Current > 0;
     };
 
     void goNext() {
-        currentState = currentState + 1 % 9;
+        m_CurrentState = m_CurrentState + 1 % 9;
+    }
+
+    void setTemp(float data) {
+        this->m_Temperature = interpolate(m_TemperatureVolts, m_TemperatureValue, data, false);
+    }
+
+    void setVoltage(float data) {
+        this->m_Voltage = data;
+    }
+
+    void setCurrent(float data) {
+        this->m_Current = data;
+    }
+
+    void setIdleCurrent(float data) {
+        this->m_idleCurrent = data;
+    }
+
+    float getTemp() {
+        return this->m_Temperature;
+    }
+
+    float getVolt() {
+        return this->m_Voltage;
+    }
+
+    float getCurrent() {
+        return this->m_Current;
+    }
+
+    float getIdleCurrent() {
+        return this->m_idleCurrent;
     }
 };
