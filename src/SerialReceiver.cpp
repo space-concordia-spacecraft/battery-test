@@ -5,6 +5,7 @@ SerialReceiver::SerialReceiver(const char* port)
         : m_ArduinoPort(port) {}
 
 void SerialReceiver::SetArduinoPort(const char* port) {
+    m_ArduinoPort.disconnect();
     m_ArduinoPort = SerialPort(port);
 }
 

@@ -38,7 +38,7 @@
      <string notr="true">background-color: rgb(247, 246, 244);</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -135,7 +135,7 @@
          <x>20</x>
          <y>10</y>
          <width>711</width>
-         <height>107</height>
+         <height>131</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -324,7 +324,7 @@
          <x>20</x>
          <y>10</y>
          <width>491</width>
-         <height>105</height>
+         <height>126</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -435,7 +435,7 @@
          <x>20</x>
          <y>10</y>
          <width>711</width>
-         <height>107</height>
+         <height>131</height>
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -605,6 +605,124 @@
      <attribute name="title">
       <string>Settings</string>
      </attribute>
+     <widget class="QComboBox" name="comboBox">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>60</y>
+        <width>151</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="editable">
+       <bool>true</bool>
+      </property>
+      <item>
+       <property name="text">
+        <string>COM1</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM2</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM3</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM4</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM5</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM6</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM7</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM8</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM9</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM10</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM11</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM12</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM13</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM14</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM15</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>COM16</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>30</y>
+        <width>151</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Arduino Port</string>
+      </property>
+     </widget>
     </widget>
    </widget>
   </widget>

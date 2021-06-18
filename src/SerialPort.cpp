@@ -39,10 +39,7 @@ SerialPort::SerialPort(const char* portName) {
 }
 
 SerialPort::~SerialPort() {
-    if (this->connected) {
-        this->connected = false;
-        CloseHandle(this->handler);
-    }
+    disconnect();
 }
 
 int SerialPort::readSerialPort(char* buffer, unsigned int buf_size) {
@@ -73,4 +70,11 @@ bool SerialPort::writeSerialPort(char* buffer, unsigned int buf_size) {
 
 bool SerialPort::isConnected() {
     return this->connected;
+}
+
+void SerialPort::disconnect() {
+    if (this->connected) {
+        this->connected = false;
+        CloseHandle(this->handler);
+    }
 }
