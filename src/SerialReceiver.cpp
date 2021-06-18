@@ -2,13 +2,13 @@
 
 
 SerialReceiver::SerialReceiver(const char* port)
-    : m_ArduinoPort(port) {}
+        : m_ArduinoPort(port) {}
 
 void SerialReceiver::SetArduinoPort(const char* port) {
     m_ArduinoPort = SerialPort(port);
 }
 
-void SerialReceiver::SetListener(const SerialListener * listener) {
+void SerialReceiver::SetListener(const SerialListener* listener) {
     m_Listener = listener;
 }
 
@@ -25,32 +25,60 @@ void SerialReceiver::Stop() {
 void SerialReceiver::Run() {
     while (m_Running) {
         if (m_ArduinoPort.isConnected() && m_Listener != nullptr) {
-            // Read serial
-            char buffer[MAX_DATA_LENGTH];
-            memset(buffer, '\0', MAX_DATA_LENGTH);
-            m_ArduinoPort.readSerialPort(buffer, MAX_DATA_LENGTH);
-
-            // Split string at commas
-            string serialStr(buffer);
-            vector<string> tokens(8);
+            // Read next serial line and split at commas
+            string serialStr = ReadNext();
+            serialStr = serialStr.substr(0, serialStr.find('\n'));
+            vector<string> tokens;
             auto delimiterIndex = string::npos;
-            while ((delimiterIndex = serialStr.find(SERIAL_DELIMITER)) != string::npos) {
+            while ((delimiterIndex = serialStr.find(SERIAL_VALUE_DELIMITER)) != string::npos) {
                 tokens.emplace_back(serialStr.substr(0, delimiterIndex));
-                serialStr = serialStr.substr(delimiterIndex + SERIAL_DELIMITER_LEN);
+                serialStr = serialStr.substr(delimiterIndex + 1);
             }
+            tokens.emplace_back(serialStr);
+
+            if (tokens.size() != 8)
+                continue;
 
             // Create and pass data struct
             SerialData data{};
-            data.m_Data[0] = std::stof(tokens[0]);
-            data.m_Data[1] = std::stof(tokens[1]);
-            data.m_Data[2] = std::stof(tokens[2]);
-            data.m_Data[3] = std::stof(tokens[3]);
-            data.m_Data[4] = std::stof(tokens[4]);
-            data.m_Data[5] = std::stof(tokens[5]);
-            data.m_Data[6] = std::stof(tokens[6]);
-            data.m_Data[7] = std::stof(tokens[7]);
+            for (int i = 0; i < 8; i++) {
+                try {
+                    data.m_Data[i] = std::stof(tokens[i]);
+                } catch (const std::exception& ex) {
+                    data.m_Data[i] = 0;
+                }
+            }
+
             m_Listener->OnReceive(data);
         }
     }
 }
 
+string SerialReceiver::ReadNext() {
+    static string next;
+
+    char tempBuffer[MAX_DATA_LENGTH];
+
+    std::stringstream ss;
+
+    while (true) {
+        int nBytes;
+        string str;
+        if (!next.empty()) {
+            str = next;
+            next = "";
+        } else {
+            nBytes = m_ArduinoPort.readSerialPort(tempBuffer, MAX_DATA_LENGTH);
+            str = string(tempBuffer, nBytes);
+        }
+        str = std::regex_replace(str, std::regex("\\s+"), "");
+        int delimiterIndex = str.find(SERIAL_LINE_DELIMITER);
+        if (delimiterIndex != string::npos) {
+            ss << str.substr(0, delimiterIndex);
+            next = str.substr(delimiterIndex + 1);
+            return ss.str();
+        }
+        ss << str;
+    }
+
+}

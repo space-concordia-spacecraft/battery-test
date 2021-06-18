@@ -12,11 +12,12 @@ int main(int argc, char** argv) {
     receiver.SetListener(reinterpret_cast<SerialListener*>(&batteryMonitor));
     receiver.Start();
 
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-
-    QApplication::exec();
+//    QApplication a(argc, argv);
+//    MainWindow w;
+//    w.show();
+//
+//    QApplication::exec();
+    while(1);
 
     receiver.Stop();
 

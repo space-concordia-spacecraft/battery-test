@@ -9,7 +9,7 @@
 #define PIN_CELL_B_DIR 4
 #define PIN_CELL_B_CHARGE 5
 
-#define PIN_BATT_SEL 6;
+#define PIN_BATT_SEL 6
 
 // SPI
 #define SPI_ADC_CS 10
@@ -27,7 +27,7 @@
 #define CHAN_JIG_TM 7
 
 /** 
- *  Function to get voltage depending on a value
+ * Function to get voltage depending on a value
  */
 float getVolts(uint16_t value){  
   return (((float)value/4096)*5);  
@@ -47,7 +47,7 @@ int readSPI(int chan) {
 
 
 /**
- * Function to charge/discharge cell B
+ * Function to charge/discharge cell A
  */
 void chargeCellA(bool charge) {
   if(charge) {
@@ -92,23 +92,23 @@ void setup() {
 
 void loop() {
 
-  // Puts all data into a string
-  channelData = "";
-  channelData = readSPI(CHAN_A_TM) + "," 
-              + readSPI(CHAN_A_IM) + "," 
-              + readSPI(CHAN_A_VM) + ","
-              + readSPI(CHAN_B_TM) + ","
-              + readSPI(CHAN_B_IM) + ","
-              + readSPI(CHAN_B_VM) + ","
-              + readSPI(CHAN_VREF) + ","
-              + readSPI(CHAN_JIG_TM);
+//  // Puts all data into a string
+//  String channelData = "";
+//  channelData = readSPI(CHAN_A_TM) + "," 
+//              + readSPI(CHAN_A_IM) + "," 
+//              + readSPI(CHAN_A_VM) + ","
+//              + readSPI(CHAN_B_TM) + ","
+//              + readSPI(CHAN_B_IM) + ","
+//              + readSPI(CHAN_B_VM) + ","
+//              + readSPI(CHAN_VREF) + ","
+//              + readSPI(CHAN_JIG_TM);
 
   // Serial prints it so that the computer can read it
-  Serial.println(channelData);
+  Serial.println("1,2,3,4,5,6,7,8;");
 
   // If there is a command available, parse it
   if(Serial.available()){
-    command = Serial.readStringUntil('\n');
+    String command = Serial.readStringUntil('\n');
          
     if(command.equals("charge_a")){
       chargeCellA(true);

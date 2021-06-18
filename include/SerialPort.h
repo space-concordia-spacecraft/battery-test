@@ -1,11 +1,11 @@
 #pragma once
 
 #define ARDUINO_WAIT_TIME 2000
-#define MAX_DATA_LENGTH 255
+#define MAX_DATA_LENGTH 4096
 
 #include <windows.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 
 class SerialPort
 {
@@ -15,7 +15,7 @@ private:
     COMSTAT status;
     DWORD errors;
 public:
-    SerialPort(const char *portName);
+    explicit SerialPort(const char *portName);
     ~SerialPort();
 
     int readSerialPort(char *buffer, unsigned int buf_size);
