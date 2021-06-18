@@ -72,7 +72,7 @@ bool SerialPort::isConnected() {
     return this->connected;
 }
 
-void SerialPort::disconnect() {
+void SerialPort::disconnect() volatile {
     if (this->connected) {
         this->connected = false;
         CloseHandle(this->handler);

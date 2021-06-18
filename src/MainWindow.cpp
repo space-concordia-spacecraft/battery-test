@@ -38,3 +38,15 @@ MainWindow::~MainWindow() {
 void MainWindow::OnChangeArduinoPort(int index) {
     m_receiver->SetArduinoPort(COM_PORTS[index]);
 }
+
+void MainWindow::OnStart() {
+
+}
+
+void MainWindow::OnStop() {
+
+}
+
+void MainWindow::OnPause() {
+
+}

@@ -1,6 +1,5 @@
 #include "SerialReceiver.h"
 
-
 SerialReceiver::SerialReceiver(const char* port)
         : m_ArduinoPort(port) {}
 
@@ -9,7 +8,7 @@ void SerialReceiver::SetArduinoPort(const char* port) {
     m_ArduinoPort = SerialPort(port);
 }
 
-void SerialReceiver::SetListener(const SerialListener* listener) {
+void SerialReceiver::SetListener(SerialListener* listener) {
     m_Listener = listener;
 }
 
@@ -24,7 +23,11 @@ void SerialReceiver::Stop() {
 }
 
 void SerialReceiver::Run() {
+
     while (m_Running) {
+
+        std::cout << m_ArduinoPort.isConnected() << std::endl;
+
         if (m_ArduinoPort.isConnected() && m_Listener != nullptr) {
             // Read next serial line and split at commas
             string serialStr = ReadNext();
@@ -53,6 +56,7 @@ void SerialReceiver::Run() {
             m_Listener->OnReceive(data);
         }
     }
+    std::cout << "dead" << std::endl;
 }
 
 string SerialReceiver::ReadNext() {

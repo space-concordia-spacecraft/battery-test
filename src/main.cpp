@@ -6,15 +6,16 @@
 
 int main(int argc, char** argv) {
 
-    BatteryMonitor batteryMonitor;
     SerialReceiver receiver;
-
-    receiver.SetListener(reinterpret_cast<SerialListener*>(&batteryMonitor));
-    receiver.Start();
 
     QApplication a(argc, argv);
     MainWindow w(&receiver);
     w.show();
+
+    BatteryMonitor batteryMonitor(w);
+
+    receiver.SetListener(reinterpret_cast<SerialListener*>(&batteryMonitor));
+    receiver.Start();
 
     QApplication::exec();
 

@@ -21,5 +21,5 @@ public:
     int readSerialPort(char *buffer, unsigned int buf_size);
     bool writeSerialPort(char *buffer, unsigned int buf_size);
     bool isConnected();
-    void disconnect();
+    void disconnect() volatile;
 };

@@ -20,20 +20,24 @@ private:
 
     float m_Temperature, m_Voltage, m_Current, m_idleCurrent;
 
-    std::vector<float> m_TemperatureValue = { -10, 0, 10, 20, 30, 40, 50, 60 };
-    std::vector<float> m_TemperatureVolts = { 1.766, 1.405, 1.065, 0.779, 0.558, 0.395, 0.280, 0.200 };
+    float m_TemperatureValue[8] = { -10, 0, 10, 20, 30, 40, 50, 60 };
+    float m_TemperatureVolts[8] = { 1.766, 1.405, 1.065, 0.779, 0.558, 0.395, 0.280, 0.200 };
 
 public:
     bool isCharging() {
         return m_Current > 0;
     };
 
+    bool isIdle() {
+        return this->m_CurrentState == IDLE1 || this->m_CurrentState == IDLE2 || this->m_CurrentState == IDLE3 || this->m_CurrentState == IDLE4;
+    }
+
     void goNext() {
-        m_CurrentState = m_CurrentState + 1 % 9;
+        m_CurrentState = ( m_CurrentState + 1 ) % 9;
     }
 
     void setTemp(float data) {
-        this->m_Temperature = interpolate(m_TemperatureVolts, m_TemperatureValue, data, false);
+        this->m_Temperature = interpolate(m_TemperatureVolts, m_TemperatureValue, data);
     }
 
     void setVoltage(float data) {
@@ -41,7 +45,7 @@ public:
     }
 
     void setCurrent(float data) {
-        this->m_Current = data;
+        this->m_Current = ( data - this->m_idleCurrent ) / 0.681;
     }
 
     void setIdleCurrent(float data) {

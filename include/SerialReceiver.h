@@ -42,10 +42,10 @@ public:
 class SerialReceiver {
 
 public:
-    explicit SerialReceiver(const char* port = R"(\\.\COM1)");
+    explicit SerialReceiver(const char* port = R"(\\.\COM4)");
 
     void SetArduinoPort(const char* port);
-    void SetListener(const SerialListener * listener);
+    void SetListener(SerialListener * listener);
 
     void Start();
     void Stop();
@@ -53,7 +53,7 @@ public:
 
 private:
     SerialPort m_ArduinoPort;
-    const SerialListener * m_Listener = nullptr;
+    SerialListener * m_Listener = nullptr;
     thread m_Thread;
     volatile bool m_Running = false;
 

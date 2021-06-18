@@ -23,7 +23,7 @@
 #define CHAN_B_TM 3
 #define CHAN_B_IM 4
 #define CHAN_B_VM 5
-#define CHAN_VREF 6
+#define CHAN_VREF A1
 #define CHAN_JIG_TM 7
 
 /** 
@@ -36,7 +36,7 @@ float getVolts(uint16_t value){
 /**
  * Function to read SPI data depending on the channel (0-7)
  */
-int readSPI(int chan) {
+float readSPI(int chan) {
   digitalWrite(SPI_ADC_CS, LOW);
   int hi = SPI.transfer( chan << 3 );
   int lo = SPI.transfer( 0 );
@@ -85,6 +85,9 @@ void setup() {
   pinMode(PIN_CELL_B_DIR, OUTPUT);
   pinMode(PIN_BATT_SEL, OUTPUT);
 
+  chargeCellA(true);
+  chargeCellB(true);
+
   SPI.begin();
   SPI.setBitOrder(MSBFIRST); // this could be MSBFIRST or LSBFIRST
   SPI.setDataMode(SPI_MODE2);  // Mode=2 CPOL=1, CPHA=0
@@ -93,18 +96,18 @@ void setup() {
 void loop() {
 
 //  // Puts all data into a string
-//  String channelData = "";
-//  channelData = readSPI(CHAN_A_TM) + "," 
-//              + readSPI(CHAN_A_IM) + "," 
-//              + readSPI(CHAN_A_VM) + ","
-//              + readSPI(CHAN_B_TM) + ","
-//              + readSPI(CHAN_B_IM) + ","
-//              + readSPI(CHAN_B_VM) + ","
-//              + readSPI(CHAN_VREF) + ","
-//              + readSPI(CHAN_JIG_TM);
+  String channelData = "";
+  channelData = String(readSPI(CHAN_A_TM)) + "," 
+              + String(readSPI(CHAN_A_IM)) + "," 
+              + String(readSPI(CHAN_A_VM)) + ","
+              + String(readSPI(CHAN_B_TM)) + ","
+              + String(readSPI(CHAN_B_IM)) + ","
+              + String(readSPI(CHAN_B_VM)) + ","
+              + String(analogRead(CHAN_VREF)*(3.0607 * 5.0 / 1023.0)) + ","
+              + String(readSPI(CHAN_JIG_TM)) + ";";
 
   // Serial prints it so that the computer can read it
-  Serial.println("1,2,3,4,5,6,7,8;");
+  Serial.println(channelData);
 
   // If there is a command available, parse it
   if(Serial.available()){

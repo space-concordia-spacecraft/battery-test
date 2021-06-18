@@ -23,4 +23,7 @@ private:
 
 private slots:
     void OnChangeArduinoPort(int index);
+    void OnStart();
+    void OnStop();
+    void OnPause();
 };
