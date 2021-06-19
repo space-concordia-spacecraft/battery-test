@@ -26,6 +26,10 @@
 #define CHAN_VREF A1
 #define CHAN_JIG_TM 7
 
+#define CHARGE 0
+#define DISCHARGE 1
+#define SLEEP 2
+
 /** 
  * Function to get voltage depending on a value
  */
@@ -49,28 +53,34 @@ float readSPI(int chan) {
 /**
  * Function to charge/discharge cell A
  */
-void chargeCellA(bool charge) {
-  if(charge) {
+void changeCellAState(int state) {
+  if(state == CHARGE) {
     digitalWrite(PIN_CELL_A_CHARGE, HIGH);
     digitalWrite(PIN_CELL_A_DIR, LOW);
-  } else {
+  } else if(state == DISCHARGE) {
     digitalWrite(PIN_CELL_A_CHARGE, LOW);
     digitalWrite(PIN_CELL_A_DIR, HIGH);
     digitalWrite(PIN_BATT_SEL, HIGH);
+  } else {
+    digitalWrite(PIN_CELL_A_DIR, LOW);
+    digitalWrite(PIN_CELL_A_CHARGE, LOW);
   }
 }
 
 /**
  * Function to charge/discharge cell B
  */
-void chargeCellB(bool charge) {
-  if(charge) {
+void changeCellBState(int state) {
+  if(state == CHARGE) {
     digitalWrite(PIN_CELL_B_CHARGE, HIGH);
     digitalWrite(PIN_CELL_B_DIR, LOW);
-  } else {
+  } else if (state == DISCHARGE) {
     digitalWrite(PIN_CELL_B_CHARGE, LOW);
     digitalWrite(PIN_CELL_B_DIR, HIGH);
     digitalWrite(PIN_BATT_SEL, LOW);
+  } else {
+    digitalWrite(PIN_CELL_B_DIR, LOW);
+    digitalWrite(PIN_CELL_B_CHARGE, LOW);
   }
 }
 
@@ -109,15 +119,19 @@ void loop() {
   // If there is a command available, parse it
   if(Serial.available()){
     String command = Serial.readStringUntil('\n');
-         
+     
     if(command.equals("charge_a")){
-      chargeCellA(true);
+      changeCellAState(CHARGE);
     } else if(command.equals("charge_b")){
-      chargeCellB(true);
+      changeCellBState(CHARGE);
     } else if(command.equals("discharge_a")){
-      chargeCellA(false);
+      changeCellAState(DISCHARGE);
     } else if(command.equals("discharge_b")){
-      chargeCellB(false);
+      changeCellBState(DISCHARGE);
+    } else if(command.equals("idle_a")) {
+      changeCellAState(SLEEP);
+    } else if(command.equals("idle_b")) {
+      changeCellBState(SLEEP);
     }
   }
 }

@@ -11,7 +11,7 @@ void SerialReceiver::SetListener(SerialListener* listener) {
     m_Listener = listener;
 }
 
-SerialPort SerialReceiver::getArduinoPort() {
+SerialPort& SerialReceiver::getArduinoPort() {
     return this->m_ArduinoPort;
 }
 

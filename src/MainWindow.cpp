@@ -42,19 +42,6 @@ void MainWindow::OnChangeArduinoPort(int index) {
     m_receiver->SetArduinoPort(COM_PORTS[index]);
 }
 void MainWindow::OnclickStart(bool checked) {
-
-//QT->isTrash(true)
-    //ui->startButton->setStyleSheet("QPushButton:checked { background-color: white; }");
-}
-
-void MainWindow::OnStart() {
-
-}
-
-void MainWindow::OnStop() {
-
-}
-
-void MainWindow::OnPause() {
-
+    if()
+    m_StartCallBack();
 }

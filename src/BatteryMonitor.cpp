@@ -12,6 +12,12 @@ BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port) : m_Window(w), m
     m_LabelBTemp = m_Window.findChild<QLabel*>("cell_b_temperature");
     m_LabelBCharge = m_Window.findChild<QLabel*>("cell_b_charge");
     m_LabelBStage = m_Window.findChild<QLabel*>("cell_b_stage");
+
+    m_BatteryA.setArduinoPort(m_ArduinoPort);
+    m_BatteryB.setArduinoPort(m_ArduinoPort);
+
+    m_BatteryA.setLetter("a");
+    m_BatteryB.setLetter("b");
 }
 
 void BatteryMonitor::OnReceive(SerialData data) {
@@ -47,6 +53,8 @@ void BatteryMonitor::OnReceive(SerialData data) {
 }
 
 void BatteryMonitor::Start() {
+    if(m_Running == true)
+        return;
     m_Running = true;
     m_Thread = thread(&BatteryMonitor::Run, this);
 
@@ -56,8 +64,8 @@ void BatteryMonitor::Start() {
     m_BatteryA.setCompleted(false);
     m_BatteryB.setCompleted(false);
 
-    //TODO: send command to arduino to charge A and idle B
-    m_ArduinoPort.writeSerialPort(COMMAND_CHARGE_A);
+    m_BatteryA.charge();
+    m_BatteryB.idle();
 }
 
 void BatteryMonitor::Stop() {
@@ -67,7 +75,8 @@ void BatteryMonitor::Stop() {
     m_BatteryA.setCompleted(true);
     m_BatteryB.setCompleted(true);
 
-    //TODO: send command to put both cells on idle
+    m_BatteryA.idle();
+    m_BatteryB.idle();
 
     m_Running = false;
     m_Thread.join();
@@ -86,17 +95,21 @@ void BatteryMonitor::Run() {
     }
 }
 
-void BatteryMonitor::checkBattery(Battery battery, Battery secondaryBattery, std::chrono::steady_clock::time_point currentMillis) {
+void BatteryMonitor::checkBattery(Battery battery, Battery secondaryBattery, std::chrono::steady_clock::time_point & currentMillis) {
     if(battery.getGeneralState() == Battery::CHARGING && battery.getVolt() >= Battery::HIGHEST_VOLTAGE) {
         if(battery.getState() == Battery::CHARGE3) {
             battery.setCompleted(true);
         }
-
         battery.goNext();
+        // restart timer
+        currentMillis = std::chrono::high_resolution_clock::now();
 
     } else if (battery.getGeneralState() == Battery::DISCHARGING && battery.getVolt() <= Battery::LOWEST_VOLTAGE) {
         battery.goNext();
+        // restart timer
+        currentMillis = std::chrono::high_resolution_clock::now();
     } else if(battery.getGeneralState() == Battery::IDLE) {
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - currentMillis);
         if(elapsed.count() >= 600) {
             battery.setReadyForNext(true);
         }

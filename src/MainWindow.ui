@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>823</width>
-    <height>521</height>
+    <width>827</width>
+    <height>550</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -55,7 +55,6 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>-1</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -64,7 +63,7 @@
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255); border-radius:20px;font-weight: bold;font-size:20px; color:#ed5250;</string>
+       <string notr="true"/>
       </property>
       <property name="text">
        <string>STOP</string>
@@ -87,7 +86,6 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>-1</pointsize>
         <weight>75</weight>
         <bold>true</bold>
        </font>
@@ -96,9 +94,7 @@
        <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: #ed5250; border-radius:20px;font-weight: bold;font-size:20px; color:rgb(255, 255, 255);
-
-</string>
+       <string notr="true"/>
       </property>
       <property name="text">
        <string>START</string>

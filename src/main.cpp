@@ -17,6 +17,8 @@ int main(int argc, char** argv) {
     receiver.SetListener(&batteryMonitor);
     receiver.Start();
 
+    w.setStartCallBack([&batteryMonitor](){batteryMonitor.Start();});
+
     QApplication::exec();
 
     receiver.Stop();

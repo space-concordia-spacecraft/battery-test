@@ -48,7 +48,7 @@ public:
     void SetArduinoPort(const char* port);
     void SetListener(SerialListener * listener);
 
-    SerialPort getArduinoPort();
+    SerialPort & getArduinoPort();
 
     void Start();
     void Stop();

@@ -9,12 +9,6 @@
 #include "MainWindow.h"
 #include <QLabel>
 
-#define COMMAND_CHARGE_A "charge_a"
-#define COMMAND_CHARGE_B "charge_b"
-
-#define COMMAND_DISCHARGE_A "discharge_a"
-#define COMMAND_DISCHARGE_B "discharge_b"
-
 class BatteryMonitor : public SerialListener {
     friend class MainWindow;
 
@@ -24,7 +18,7 @@ public:
     void OnReceive(SerialData data) final;
     void startCharging();
     float m_JigTemperature, m_VRef;
-    void checkBattery(Battery battery, Battery secondaryBattery, std::chrono::steady_clock::time_point currentMillis);
+    void checkBattery(Battery battery, Battery secondaryBattery, std::chrono::steady_clock::time_point & currentMillis);
 
     QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelACharge, *m_LabelAStage;
     QLabel *m_LabelBTemp, *m_LabelBCurrent, *m_LabelBVoltage, *m_LabelBCharge, *m_LabelBStage;

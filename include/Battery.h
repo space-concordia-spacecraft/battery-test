@@ -1,6 +1,13 @@
 #pragma once
 
 #include "Utils.h"
+#include "SerialPort.h"
+
+#define COMMAND_CHARGE "charge_"
+
+#define COMMAND_DISCHARGE "discharge_"
+
+#define COMMAND_IDLE "idle_"
 
 struct Battery {
 
@@ -38,8 +45,29 @@ public:
         return this->m_CurrentState == IDLE0 || this->m_CurrentState == IDLE1 || this->m_CurrentState == IDLE2 || this->m_CurrentState == IDLE3 || this->m_CurrentState == IDLE4;
     }
 
+    void charge() {
+        m_ArduinoPort.writeSerialPort((std::string(COMMAND_CHARGE) + m_Letter).c_str());
+    }
+
+    void discharge() {
+        m_ArduinoPort.writeSerialPort((std::string(COMMAND_DISCHARGE) + m_Letter).c_str());
+    }
+
+    void idle() {
+        m_ArduinoPort.writeSerialPort((std::string(COMMAND_IDLE) + m_Letter).c_str());
+    }
+
     void goNext() {
         m_CurrentState = ( m_CurrentState + 1 ) % 9;
+
+        int state = this->getGeneralState();
+        if(state == CHARGING) {
+            charge();
+        } else if(state == DISCHARGING) {
+            discharge();
+        } else if (state == IDLE) {
+            idle();
+        }
     }
 
     void setTemp(float data) {
@@ -69,6 +97,14 @@ public:
 
     void setReadyForNext(bool ready) {
         this->m_ReadyForNext = ready;
+    }
+
+    void setArduinoPort(SerialPort port) {
+        this->m_ArduinoPort = port;
+    }
+
+    void setLetter(std::string letter) {
+        this->m_Letter = letter;
     }
 
     float getTemp() {
@@ -101,6 +137,9 @@ public:
 
 private:
     int m_CurrentState = CHARGE1;
+
+    std::string m_Letter;
+    SerialPort m_ArduinoPort;
 
     float m_Temperature, m_Voltage, m_Current, m_IdleCurrent, m_Charge;
 
