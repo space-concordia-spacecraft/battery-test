@@ -8,8 +8,7 @@
 #include <cstdlib>
 #include <mutex>
 
-class SerialPort
-{
+class SerialPort {
 private:
     HANDLE handler = INVALID_HANDLE_VALUE;
     bool connected = false;
@@ -17,12 +16,14 @@ private:
     DWORD errors = 0;
 
 public:
-    explicit SerialPort(const char *portName);
+    explicit SerialPort(const char* portName);
+
     ~SerialPort();
 
-    int readSerialPort(char *buffer, unsigned int buf_size);
-    bool writeSerialPort(char *buffer, unsigned int buf_size);
+    int readSerialPort(char* buffer, unsigned int buf_size);
+    bool writeSerialPort(const char* buffer);
+
     bool isConnected();
     void disconnect();
-    void connect(const char * port);
+    void connect(const char* port);
 };

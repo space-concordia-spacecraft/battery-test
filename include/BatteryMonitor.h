@@ -1,12 +1,19 @@
 #pragma once
 
+#include <chrono>
+#include <thread>
+
 #include "Battery.h"
 #include "SerialReceiver.h"
 #include "SerialPort.h"
 #include "MainWindow.h"
-#include "QLabel.h"
-#include <chrono>
-#include <thread>
+#include <QLabel>
+
+#define COMMAND_CHARGE_A "charge_a"
+#define COMMAND_CHARGE_B "charge_b"
+
+#define COMMAND_DISCHARGE_A "discharge_a"
+#define COMMAND_DISCHARGE_B "discharge_b"
 
 class BatteryMonitor : public SerialListener {
     friend class MainWindow;
@@ -29,7 +36,7 @@ public:
 private:
     Battery m_BatteryA{}, m_BatteryB{};
     MainWindow & m_Window;
-    SerialPort m_ArduinoPort;
+    SerialPort & m_ArduinoPort;
 
     thread m_Thread;
     volatile bool m_Running = false;
