@@ -1,6 +1,6 @@
 #include "BatteryMonitor.h"
 
-BatteryMonitor::BatteryMonitor(MainWindow & w, SerialPort & port):m_Window(w),m_ArduinoPort(port){
+BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port) : m_Window(w), m_ArduinoPort(port) {
     m_LabelAVoltage = m_Window.findChild<QLabel*>("cell_a_voltage");
     m_LabelACurrent = m_Window.findChild<QLabel*>("cell_a_current");
     m_LabelATemp = m_Window.findChild<QLabel*>("cell_a_temperature");
@@ -17,11 +17,11 @@ BatteryMonitor::BatteryMonitor(MainWindow & w, SerialPort & port):m_Window(w),m_
 void BatteryMonitor::OnReceive(SerialData data) {
     // Store results in m_BatteryA and m_BatteryB
 
-    if(m_BatteryA.isIdle()) {
+    if (m_BatteryA.isIdle()) {
         m_BatteryA.setIdleCurrent(data.m_CellA_IM);
     }
 
-    if(m_BatteryB.isIdle()) {
+    if (m_BatteryB.isIdle()) {
         m_BatteryB.setIdleCurrent(data.m_CellB_IM);
     }
 
@@ -57,6 +57,7 @@ void BatteryMonitor::Start() {
     m_BatteryB.setCompleted(false);
 
     //TODO: send command to arduino to charge A and idle B
+    m_ArduinoPort.writeSerialPort(COMMAND_CHARGE_A);
 }
 
 void BatteryMonitor::Stop() {
@@ -93,10 +94,9 @@ void BatteryMonitor::checkBattery(Battery battery, Battery secondaryBattery, std
 
         battery.goNext();
 
-    } else if(battery.getGeneralState() == Battery::DISCHARGING && battery.getVolt() <= Battery::LOWEST_VOLTAGE) {
+    } else if (battery.getGeneralState() == Battery::DISCHARGING && battery.getVolt() <= Battery::LOWEST_VOLTAGE) {
         battery.goNext();
     } else if(battery.getGeneralState() == Battery::IDLE) {
-        std::chrono::duration<double> elapsed = std::chrono::high_resolution_clock::now() - currentMillis;
         if(elapsed.count() >= 600) {
             battery.setReadyForNext(true);
         }

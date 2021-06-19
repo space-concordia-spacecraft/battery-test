@@ -30,14 +30,16 @@ int SerialPort::readSerialPort(char* buffer, unsigned int buf_size) {
     return 0;
 }
 
-bool SerialPort::writeSerialPort(char* buffer, unsigned int buf_size) {
+bool SerialPort::writeSerialPort(const char* buffer) {
     std::lock_guard guard(portMutex);
-    DWORD bytesSend;
+    DWORD bytesSent;
+    DWORD size = std::string(buffer).size();
 
-    if (!WriteFile(this->handler, (void*) buffer, buf_size, &bytesSend, 0)) {
+    if (!WriteFile(this->handler, (void*) buffer, size, &bytesSent, nullptr)) {
         ClearCommError(this->handler, &this->errors, &this->status);
         return false;
-    } else return true;
+    } else
+        return true;
 }
 
 bool SerialPort::isConnected() {
