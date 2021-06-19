@@ -29,6 +29,9 @@ MainWindow::MainWindow(SerialReceiver* receiver, QWidget* parent) :
 {
     ui->setupUi(this);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(OnChangeArduinoPort(int)));
+    connect(ui->startButton, SIGNAL(clicked(bool)), this, SLOT(OnclickStart(bool)));
+
+
 }
 
 MainWindow::~MainWindow() {
@@ -37,6 +40,11 @@ MainWindow::~MainWindow() {
 
 void MainWindow::OnChangeArduinoPort(int index) {
     m_receiver->SetArduinoPort(COM_PORTS[index]);
+}
+void MainWindow::OnclickStart(bool checked) {
+
+//QT->isTrash(true)
+    //ui->startButton->setStyleSheet("QPushButton:checked { background-color: white; }");
 }
 
 void MainWindow::OnStart() {

@@ -12,6 +12,9 @@ namespace Ui {
 class MainWindow : public QMainWindow {
 Q_OBJECT
 
+    MainWindow(QWidget *parent);
+
+
 public:
     explicit MainWindow(SerialReceiver* receiver, QWidget* parent = nullptr);
 
@@ -21,8 +24,12 @@ private:
     Ui::MainWindow* ui;
     SerialReceiver* m_receiver;
 
+
+
+
 private slots:
     void OnChangeArduinoPort(int index);
+    void OnclickStart(bool checked);
     void OnStart();
     void OnStop();
     void OnPause();

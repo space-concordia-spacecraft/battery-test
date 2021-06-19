@@ -37,13 +37,13 @@ void BatteryMonitor::OnReceive(SerialData data) {
     this->m_JigTemperature = data.m_Jig_TM;
     this->m_VRef = data.m_VRef;
 
-    (*m_LabelAVoltage).setText(QString::fromStdString(std::to_string(m_BatteryA.getVolt())));
-    (*m_LabelATemp).setText(QString::fromStdString(std::to_string(m_BatteryA.getTemp())));
-    (*m_LabelACurrent).setText(QString::fromStdString(std::to_string(m_BatteryA.getCurrent())));
+    m_LabelAVoltage->setText(QString::number(m_BatteryA.getVolt()));
+    m_LabelATemp->setText(QString::number(m_BatteryA.getTemp()));
+    m_LabelACurrent->setText(QString::number(m_BatteryA.getCurrent()));
 
-    (*m_LabelBVoltage).setText(QString::fromStdString(std::to_string(m_BatteryB.getVolt())));
-    (*m_LabelBTemp).setText(QString::fromStdString(std::to_string(m_BatteryB.getTemp())));
-    (*m_LabelBCurrent).setText(QString::fromStdString(std::to_string(m_BatteryB.getCurrent())));
+    m_LabelBVoltage->setText(QString::number(m_BatteryB.getVolt()));
+    m_LabelBTemp->setText(QString::number(m_BatteryB.getTemp()));
+    m_LabelBCurrent->setText(QString::number(m_BatteryB.getCurrent()));
 }
 
 void BatteryMonitor::Start() {
