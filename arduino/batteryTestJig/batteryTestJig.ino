@@ -85,9 +85,6 @@ void setup() {
   pinMode(PIN_CELL_B_DIR, OUTPUT);
   pinMode(PIN_BATT_SEL, OUTPUT);
 
-  chargeCellA(true);
-  chargeCellB(true);
-
   SPI.begin();
   SPI.setBitOrder(MSBFIRST); // this could be MSBFIRST or LSBFIRST
   SPI.setDataMode(SPI_MODE2);  // Mode=2 CPOL=1, CPHA=0

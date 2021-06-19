@@ -67,6 +67,10 @@ public:
         this->m_Completed = completed;
     }
 
+    void setReadyForNext(bool ready) {
+        this->m_ReadyForNext = ready;
+    }
+
     float getTemp() {
         return this->m_Temperature;
     }
@@ -91,12 +95,16 @@ public:
         return this->m_Completed;
     }
 
+    bool isReadyForNext() {
+        return this->m_ReadyForNext;
+    }
+
 private:
     int m_CurrentState = CHARGE1;
 
     float m_Temperature, m_Voltage, m_Current, m_IdleCurrent, m_Charge;
 
-    bool m_Completed = false;
+    bool m_Completed = false, m_ReadyForNext  = false;
 
     float m_TemperatureValue[8] = { -10, 0, 10, 20, 30, 40, 50, 60 };
     float m_TemperatureVolts[8] = { 1.766, 1.405, 1.065, 0.779, 0.558, 0.395, 0.280, 0.200 };

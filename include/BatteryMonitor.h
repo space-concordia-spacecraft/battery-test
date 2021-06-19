@@ -17,7 +17,7 @@ public:
     void OnReceive(SerialData data) final;
     void startCharging();
     float m_JigTemperature, m_VRef;
-    void checkBattery(Battery battery, std::chrono::steady_clock::time_point currentMillis);
+    void checkBattery(Battery battery, Battery secondaryBattery, std::chrono::steady_clock::time_point currentMillis);
 
     QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelACharge, *m_LabelAStage;
     QLabel *m_LabelBTemp, *m_LabelBCurrent, *m_LabelBVoltage, *m_LabelBCharge, *m_LabelBStage;

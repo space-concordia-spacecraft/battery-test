@@ -78,14 +78,14 @@ void BatteryMonitor::Run() {
 
     while (m_Running && (!m_BatteryA.isCompleted() || !m_BatteryB.isCompleted())) {
 
-        checkBattery(m_BatteryA, currentMillisA);
-        checkBattery(m_BatteryB, currentMillisB);
+        checkBattery(m_BatteryA, m_BatteryB, currentMillisA);
+        checkBattery(m_BatteryB, m_BatteryA, currentMillisB);
 
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
 }
 
-void BatteryMonitor::checkBattery(Battery battery, std::chrono::steady_clock::time_point currentMillis) {
+void BatteryMonitor::checkBattery(Battery battery, Battery secondaryBattery, std::chrono::steady_clock::time_point currentMillis) {
     if(battery.getGeneralState() == Battery::CHARGING && battery.getVolt() >= Battery::HIGHEST_VOLTAGE) {
         if(battery.getState() == Battery::CHARGE3) {
             battery.setCompleted(true);
@@ -95,10 +95,15 @@ void BatteryMonitor::checkBattery(Battery battery, std::chrono::steady_clock::ti
 
     } else if(battery.getGeneralState() == Battery::DISCHARGING && battery.getVolt() <= Battery::LOWEST_VOLTAGE) {
         battery.goNext();
-    } else {
+    } else if(battery.getGeneralState() == Battery::IDLE) {
         std::chrono::duration<double> elapsed = std::chrono::high_resolution_clock::now() - currentMillis;
         if(elapsed.count() >= 600) {
+            battery.setReadyForNext(true);
+        }
+
+        if(battery.isReadyForNext() && secondaryBattery.isReadyForNext()) {
             battery.goNext();
+            secondaryBattery.goNext();
         }
     }
 }
