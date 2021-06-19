@@ -52,15 +52,53 @@ void BatteryMonitor::Start() {
 
     m_BatteryA.setState(Battery::CHARGE1);
     m_BatteryB.setState(Battery::IDLE0);
+
+    m_BatteryA.setCompleted(false);
+    m_BatteryB.setCompleted(false);
+
+    //TODO: send command to arduino to charge A and idle B
 }
 
 void BatteryMonitor::Stop() {
+    m_BatteryA.setState(Battery::IDLE0);
+    m_BatteryB.setState(Battery::IDLE0);
+
+    m_BatteryA.setCompleted(true);
+    m_BatteryB.setCompleted(true);
+
+    //TODO: send command to put both cells on idle
+
     m_Running = false;
     m_Thread.join();
 }
 
 void BatteryMonitor::Run() {
-    while (m_Running) {
+    auto currentMillisA = std::chrono::high_resolution_clock::now();
+    auto currentMillisB = std::chrono::high_resolution_clock::now();
 
+    while (m_Running && (!m_BatteryA.isCompleted() || !m_BatteryB.isCompleted())) {
+
+        checkBattery(m_BatteryA, currentMillisA);
+        checkBattery(m_BatteryB, currentMillisB);
+
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+}
+
+void BatteryMonitor::checkBattery(Battery battery, std::chrono::steady_clock::time_point currentMillis) {
+    if(battery.getGeneralState() == Battery::CHARGING && battery.getVolt() >= Battery::HIGHEST_VOLTAGE) {
+        if(battery.getState() == Battery::CHARGE3) {
+            battery.setCompleted(true);
+        }
+
+        battery.goNext();
+
+    } else if(battery.getGeneralState() == Battery::DISCHARGING && battery.getVolt() <= Battery::LOWEST_VOLTAGE) {
+        battery.goNext();
+    } else {
+        std::chrono::duration<double> elapsed = std::chrono::high_resolution_clock::now() - currentMillis;
+        if(elapsed.count() >= 600) {
+            battery.goNext();
+        }
     }
 }
