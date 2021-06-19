@@ -17,16 +17,16 @@ BatteryMonitor::BatteryMonitor(MainWindow & w):m_Window(w){
 void BatteryMonitor::OnReceive(SerialData data) {
     // TODO calculations for IM and TM values
     // Store results in m_BatteryA and m_BatteryB
-    std::cout << data.m_CellA_TM << std::endl;
-    std::cout << data.m_CellA_IM << std::endl;
-    std::cout << data.m_CellA_VM << std::endl;
-
-    std::cout << data.m_CellB_TM << std::endl;
-    std::cout << data.m_CellB_IM << std::endl;
-    std::cout << data.m_CellB_VM << std::endl;
-
-    std::cout << data.m_VRef << std::endl;
-    std::cout << data.m_Jig_TM << std::endl;
+//    std::cout << data.m_CellA_TM << std::endl;
+//    std::cout << data.m_CellA_IM << std::endl;
+//    std::cout << data.m_CellA_VM << std::endl;
+//
+//    std::cout << data.m_CellB_TM << std::endl;
+//    std::cout << data.m_CellB_IM << std::endl;
+//    std::cout << data.m_CellB_VM << std::endl;
+//
+//    std::cout << data.m_VRef << std::endl;
+//    std::cout << data.m_Jig_TM << std::endl;
 
     if(m_BatteryA.isIdle()) {
         m_BatteryA.setIdleCurrent(data.m_CellA_IM);

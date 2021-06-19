@@ -42,7 +42,8 @@ public:
 class SerialReceiver {
 
 public:
-    explicit SerialReceiver(const char* port = R"(\\.\COM4)");
+    explicit SerialReceiver(const char* port = R"(\\.\COM1)");
+    explicit SerialReceiver(const SerialPort& mArduinoPort);
 
     void SetArduinoPort(const char* port);
     void SetListener(SerialListener * listener);

@@ -1,6 +1,61 @@
 #include "SerialPort.h"
 
+#include <iostream>
+
+static std::mutex portMutex;
+
 SerialPort::SerialPort(const char* portName) {
+    connect(portName);
+}
+
+SerialPort::~SerialPort() {
+    disconnect();
+}
+
+int SerialPort::readSerialPort(char* buffer, unsigned int buf_size) {
+    std::lock_guard guard(portMutex);
+    DWORD bytesRead;
+    unsigned int toRead = 0;
+
+    ClearCommError(this->handler, &this->errors, &this->status);
+
+    if (this->status.cbInQue > 0) {
+        if (this->status.cbInQue > buf_size) {
+            toRead = buf_size;
+        } else toRead = this->status.cbInQue;
+    }
+
+    if (ReadFile(this->handler, buffer, toRead, &bytesRead, NULL)) return bytesRead;
+
+    return 0;
+}
+
+bool SerialPort::writeSerialPort(char* buffer, unsigned int buf_size) {
+    std::lock_guard guard(portMutex);
+    DWORD bytesSend;
+
+    if (!WriteFile(this->handler, (void*) buffer, buf_size, &bytesSend, 0)) {
+        ClearCommError(this->handler, &this->errors, &this->status);
+        return false;
+    } else return true;
+}
+
+bool SerialPort::isConnected() {
+    return this->connected;
+}
+
+void SerialPort::disconnect() {
+    std::lock_guard guard(portMutex);
+    if (this->connected) {
+        this->connected = false;
+        CloseHandle(this->handler);
+    }
+}
+
+void SerialPort::connect(const char* portName) {
+    if (connected)
+        disconnect();
+    std::lock_guard guard(portMutex);
     this->connected = false;
     this->handler = CreateFileA(static_cast<LPCSTR>(portName),
                                 GENERIC_READ | GENERIC_WRITE,
@@ -35,46 +90,5 @@ SerialPort::SerialPort(const char* portName) {
                 Sleep(ARDUINO_WAIT_TIME);
             }
         }
-    }
-}
-
-SerialPort::~SerialPort() {
-    disconnect();
-}
-
-int SerialPort::readSerialPort(char* buffer, unsigned int buf_size) {
-    DWORD bytesRead;
-    unsigned int toRead = 0;
-
-    ClearCommError(this->handler, &this->errors, &this->status);
-
-    if (this->status.cbInQue > 0) {
-        if (this->status.cbInQue > buf_size) {
-            toRead = buf_size;
-        } else toRead = this->status.cbInQue;
-    }
-
-    if (ReadFile(this->handler, buffer, toRead, &bytesRead, NULL)) return bytesRead;
-
-    return 0;
-}
-
-bool SerialPort::writeSerialPort(char* buffer, unsigned int buf_size) {
-    DWORD bytesSend;
-
-    if (!WriteFile(this->handler, (void*) buffer, buf_size, &bytesSend, 0)) {
-        ClearCommError(this->handler, &this->errors, &this->status);
-        return false;
-    } else return true;
-}
-
-bool SerialPort::isConnected() {
-    return this->connected;
-}
-
-void SerialPort::disconnect() volatile {
-    if (this->connected) {
-        this->connected = false;
-        CloseHandle(this->handler);
     }
 }

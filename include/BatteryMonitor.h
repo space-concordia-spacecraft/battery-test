@@ -3,15 +3,16 @@
 #include "Battery.h"
 #include "SerialReceiver.h"
 #include "MainWindow.h"
-#include "QLabel.h"
 
-class BatteryMonitor : SerialListener {
+#include <QLabel>
+
+class BatteryMonitor : public SerialListener {
     friend class MainWindow;
 
 public:
-    BatteryMonitor(MainWindow & w);
+    explicit BatteryMonitor(MainWindow & w);
 
-    virtual void OnReceive(SerialData data) override final;
+    void OnReceive(SerialData data) final;
     void startCharging();
     float m_JigTemperature, m_VRef;
 
