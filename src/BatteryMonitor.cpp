@@ -47,13 +47,14 @@ void BatteryMonitor::OnReceive(SerialData data) {
     this->m_JigTemperature = data.m_Jig_TM;
     this->m_VRef = data.m_VRef;
 
-    m_LabelAVoltage->setText(QString::number(m_BatteryA.getVolt()));
-    m_LabelATemp->setText(QString::number(m_BatteryA.getTemp()));
-    m_LabelACurrent->setText(QString::number(m_BatteryA.getCurrent()));
+    static const int precision = 3;
+    m_LabelAVoltage->setText(QString::number(m_BatteryA.getVolt(), 'g', precision));
+    m_LabelATemp->setText(QString::number(m_BatteryA.getTemp(), 'g', precision));
+    m_LabelACurrent->setText(QString::number(m_BatteryA.getCurrent(), 'g', precision));
 
-    m_LabelBVoltage->setText(QString::number(m_BatteryB.getVolt()));
-    m_LabelBTemp->setText(QString::number(m_BatteryB.getTemp()));
-    m_LabelBCurrent->setText(QString::number(m_BatteryB.getCurrent()));
+    m_LabelBVoltage->setText(QString::number(m_BatteryB.getVolt(), 'g', precision));
+    m_LabelBTemp->setText(QString::number(m_BatteryB.getTemp(), 'g', precision));
+    m_LabelBCurrent->setText(QString::number(m_BatteryB.getCurrent(), 'g', precision));
 }
 
 void startCharging() {
