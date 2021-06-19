@@ -4,8 +4,7 @@ SerialReceiver::SerialReceiver(const char* port)
         : m_ArduinoPort(port) {}
 
 void SerialReceiver::SetArduinoPort(const char* port) {
-    m_ArduinoPort.disconnect();
-    m_ArduinoPort = SerialPort(port);
+    m_ArduinoPort.connect(port);
 }
 
 void SerialReceiver::SetListener(SerialListener* listener) {
@@ -31,7 +30,9 @@ void SerialReceiver::Run() {
         if (m_ArduinoPort.isConnected() && m_Listener != nullptr) {
             // Read next serial line and split at commas
             string serialStr = ReadNext();
-            serialStr = serialStr.substr(0, serialStr.find('\n'));
+            if (serialStr.empty())
+                goto next;
+
             vector<string> tokens;
             auto delimiterIndex = string::npos;
             while ((delimiterIndex = serialStr.find(SERIAL_VALUE_DELIMITER)) != string::npos) {
@@ -55,6 +56,8 @@ void SerialReceiver::Run() {
 
             m_Listener->OnReceive(data);
         }
+        next:
+        std::this_thread::yield();
     }
 }
 
@@ -65,14 +68,16 @@ string SerialReceiver::ReadNext() {
 
     std::stringstream ss;
 
+    auto lastTime = std::chrono::system_clock::now();
+
     while (true) {
-        int nBytes;
         string str;
+
         if (!next.empty()) {
             str = next;
             next = "";
         } else {
-            nBytes = m_ArduinoPort.readSerialPort(tempBuffer, MAX_DATA_LENGTH);
+            int nBytes = m_ArduinoPort.readSerialPort(tempBuffer, MAX_DATA_LENGTH);
             str = string(tempBuffer, nBytes);
         }
         str = std::regex_replace(str, std::regex("\\s+"), "");
@@ -83,6 +88,15 @@ string SerialReceiver::ReadNext() {
             return ss.str();
         }
         ss << str;
+        auto currentTime = std::chrono::system_clock::now();
+        long diff = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
+        if (diff > 100) {
+            next = ss.str();
+            return "";
+        }
+        std::this_thread::yield();
     }
 
 }
+
+SerialReceiver::SerialReceiver(const SerialPort& mArduinoPort) : m_ArduinoPort(mArduinoPort) {}

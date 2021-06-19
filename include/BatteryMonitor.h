@@ -8,13 +8,13 @@
 #include <chrono>
 #include <thread>
 
-class BatteryMonitor : SerialListener {
+class BatteryMonitor : public SerialListener {
     friend class MainWindow;
 
 public:
-    BatteryMonitor(MainWindow & w, SerialPort & port);
+    explicit BatteryMonitor(MainWindow & w, SerialPort & port);
 
-    virtual void OnReceive(SerialData data) override final;
+    void OnReceive(SerialData data) final;
     void startCharging();
     float m_JigTemperature, m_VRef;
     void checkBattery(Battery battery, std::chrono::steady_clock::time_point currentMillis);

@@ -14,7 +14,7 @@ int main(int argc, char** argv) {
 
     BatteryMonitor batteryMonitor(w, receiver.getArduinoPort());
 
-    receiver.SetListener(reinterpret_cast<SerialListener*>(&batteryMonitor));
+    receiver.SetListener(&batteryMonitor);
     receiver.Start();
 
     QApplication::exec();
