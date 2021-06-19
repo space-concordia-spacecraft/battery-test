@@ -28,9 +28,9 @@ public:
     void Run();
 
 private:
-    Battery m_BatteryA{}, m_BatteryB{};
     MainWindow & m_Window;
     SerialPort & m_ArduinoPort;
+    Battery m_BatteryA, m_BatteryB;
 
     thread m_Thread;
     volatile bool m_Running = false;

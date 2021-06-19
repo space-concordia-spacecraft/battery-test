@@ -32,6 +32,8 @@ public:
     constexpr const static float LOWEST_VOLTAGE = 3.0f;
     constexpr const static float HIGHEST_VOLTAGE = 4.2f;
 
+    explicit Battery(SerialPort& port) : m_ArduinoPort(port) {}
+
     int getGeneralState() {
         if(this->m_CurrentState == IDLE0 || this->m_CurrentState == IDLE1 || this->m_CurrentState == IDLE2 || this->m_CurrentState == IDLE3 || this->m_CurrentState == IDLE4)
             return IDLE;
@@ -139,9 +141,9 @@ private:
     int m_CurrentState = CHARGE1;
 
     std::string m_Letter;
-    SerialPort m_ArduinoPort;
+    SerialPort & m_ArduinoPort;
 
-    float m_Temperature, m_Voltage, m_Current, m_IdleCurrent, m_Charge;
+    float m_Temperature{}, m_Voltage{}, m_Current{}, m_IdleCurrent{}, m_Charge{};
 
     bool m_Completed = false, m_ReadyForNext  = false;
 

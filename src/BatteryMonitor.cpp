@@ -1,6 +1,6 @@
 #include "BatteryMonitor.h"
 
-BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port) : m_Window(w), m_ArduinoPort(port) {
+BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port) : m_Window(w), m_ArduinoPort(port), m_BatteryA(port), m_BatteryB(port) {
     m_LabelAVoltage = m_Window.findChild<QLabel*>("cell_a_voltage");
     m_LabelACurrent = m_Window.findChild<QLabel*>("cell_a_current");
     m_LabelATemp = m_Window.findChild<QLabel*>("cell_a_temperature");

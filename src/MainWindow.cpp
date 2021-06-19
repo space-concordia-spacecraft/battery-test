@@ -42,6 +42,6 @@ void MainWindow::OnChangeArduinoPort(int index) {
     m_receiver->SetArduinoPort(COM_PORTS[index]);
 }
 void MainWindow::OnclickStart(bool checked) {
-    if()
-    m_StartCallBack();
+    if (m_StartCallBack)
+        m_StartCallBack();
 }
