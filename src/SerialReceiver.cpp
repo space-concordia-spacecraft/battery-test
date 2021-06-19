@@ -12,6 +12,10 @@ void SerialReceiver::SetListener(SerialListener* listener) {
     m_Listener = listener;
 }
 
+SerialPort SerialReceiver::getArduinoPort() {
+    return this->m_ArduinoPort;
+}
+
 void SerialReceiver::Start() {
     m_Running = true;
     m_Thread = thread(&SerialReceiver::Run, this);
@@ -56,7 +60,6 @@ void SerialReceiver::Run() {
             m_Listener->OnReceive(data);
         }
     }
-    std::cout << "dead" << std::endl;
 }
 
 string SerialReceiver::ReadNext() {

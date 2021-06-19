@@ -1,6 +1,6 @@
 #include "BatteryMonitor.h"
 
-BatteryMonitor::BatteryMonitor(MainWindow & w):m_Window(w){
+BatteryMonitor::BatteryMonitor(MainWindow & w, SerialPort & port):m_Window(w),m_ArduinoPort(port){
     m_LabelAVoltage = m_Window.findChild<QLabel*>("cell_a_voltage");
     m_LabelACurrent = m_Window.findChild<QLabel*>("cell_a_current");
     m_LabelATemp = m_Window.findChild<QLabel*>("cell_a_temperature");
@@ -17,16 +17,6 @@ BatteryMonitor::BatteryMonitor(MainWindow & w):m_Window(w){
 void BatteryMonitor::OnReceive(SerialData data) {
     // TODO calculations for IM and TM values
     // Store results in m_BatteryA and m_BatteryB
-    std::cout << data.m_CellA_TM << std::endl;
-    std::cout << data.m_CellA_IM << std::endl;
-    std::cout << data.m_CellA_VM << std::endl;
-
-    std::cout << data.m_CellB_TM << std::endl;
-    std::cout << data.m_CellB_IM << std::endl;
-    std::cout << data.m_CellB_VM << std::endl;
-
-    std::cout << data.m_VRef << std::endl;
-    std::cout << data.m_Jig_TM << std::endl;
 
     if(m_BatteryA.isIdle()) {
         m_BatteryA.setIdleCurrent(data.m_CellA_IM);
@@ -56,6 +46,21 @@ void BatteryMonitor::OnReceive(SerialData data) {
     (*m_LabelBCurrent).setText(QString::fromStdString(std::to_string(m_BatteryB.getCurrent())));
 }
 
-void startCharging() {
+void BatteryMonitor::Start() {
+    m_Running = true;
+    m_Thread = thread(&BatteryMonitor::Run, this);
 
+    m_BatteryA.setState(Battery::CHARGE1);
+    m_BatteryB.setState(Battery::IDLE0);
+}
+
+void BatteryMonitor::Stop() {
+    m_Running = false;
+    m_Thread.join();
+}
+
+void BatteryMonitor::Run() {
+    while (m_Running) {
+
+    }
 }

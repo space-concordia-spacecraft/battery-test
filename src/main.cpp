@@ -12,7 +12,7 @@ int main(int argc, char** argv) {
     MainWindow w(&receiver);
     w.show();
 
-    BatteryMonitor batteryMonitor(w);
+    BatteryMonitor batteryMonitor(w, receiver.getArduinoPort());
 
     receiver.SetListener(reinterpret_cast<SerialListener*>(&batteryMonitor));
     receiver.Start();
