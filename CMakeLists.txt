@@ -24,5 +24,6 @@ file(GLOB BATTERY_SRC "include/*.h" "src/*.cpp" "src/*.ui")
 add_executable("Battery" ${BATTERY_SRC})
 
 # Link the needed libraries along with the executable
-target_link_libraries("Battery" PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets)
-target_include_directories("Battery" PRIVATE include ${CMAKE_CURRENT_BINARY_DIR})
+target_link_directories("Battery" PRIVATE "C:\\Program Files\\IVI Foundation\\VISA\\Win64\\Lib_x64\\msc")
+target_include_directories("Battery" PRIVATE include ${CMAKE_CURRENT_BINARY_DIR} "C:\\Program Files\\IVI Foundation\\VISA\\Win64\\Include")
+target_link_libraries("Battery" PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets visa64)
