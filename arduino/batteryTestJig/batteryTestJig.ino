@@ -30,11 +30,13 @@
 #define DISCHARGE 1
 #define SLEEP 2
 
+float vref = 5.0f;
+
 /** 
  * Function to get voltage depending on a value
  */
 float getVolts(uint16_t value){  
-  return (((float)value/4096)*5);  
+  return (((float)value/4096)*vref);  
 }
 
 /**
@@ -46,7 +48,7 @@ float readSPI(int chan) {
   int lo = SPI.transfer( 0 );
   digitalWrite(SPI_ADC_CS, HIGH);
   
-  return getVolts(((hi << 8) | lo) & 0xFFF);
+  return getVolts(( (hi << 8) | lo ) << 1);
 }
 
 
@@ -56,7 +58,7 @@ float readSPI(int chan) {
 void changeCellAState(int state) {
   if(state == CHARGE) {
     digitalWrite(PIN_CELL_A_CHARGE, HIGH);
-    digitalWrite(PIN_CELL_A_DIR, LOW);
+    digitalWrite(PIN_CELL_A_DIR, LOW);    
   } else if(state == DISCHARGE) {
     digitalWrite(PIN_CELL_A_CHARGE, LOW);
     digitalWrite(PIN_CELL_A_DIR, HIGH);
@@ -95,31 +97,32 @@ void setup() {
   pinMode(PIN_CELL_B_DIR, OUTPUT);
   pinMode(PIN_BATT_SEL, OUTPUT);
 
+  pinMode(PIN_BUZZER, OUTPUT);
+
   SPI.begin();
   SPI.setBitOrder(MSBFIRST); // this could be MSBFIRST or LSBFIRST
   SPI.setDataMode(SPI_MODE2);  // Mode=2 CPOL=1, CPHA=0
+
+  analogReference(INTERNAL2V5);
 }
 
 void loop() {
 
-//  // Puts all data into a string
-  String channelData = "";
-  channelData = String(readSPI(CHAN_A_TM)) + "," 
-              + String(readSPI(CHAN_A_IM)) + "," 
-              + String(readSPI(CHAN_A_VM)) + ","
-              + String(readSPI(CHAN_B_TM)) + ","
-              + String(readSPI(CHAN_B_IM)) + ","
-              + String(readSPI(CHAN_B_VM)) + ","
-              + String(analogRead(CHAN_VREF)*(3.0607 * 5.0 / 1023.0)) + ","
-              + String(readSPI(CHAN_JIG_TM)) + ";";
-
-  // Serial prints it so that the computer can read it
-  Serial.println(channelData);
-
+  vref = analogRead(CHAN_VREF)*(3.0607 * 2.5 / 1024.0);
+  
+  for (int i=0; i<8; i++) {
+    int chan = (i == 7) ? 0 : i+1;
+    float val = (i == 6) ? vref : readSPI(chan);
+    Serial.print(val);
+    if(i != 7)
+      Serial.print(",");
+  }
+  Serial.println(";");
+  
   // If there is a command available, parse it
   if(Serial.available()){
     String command = Serial.readStringUntil('\n');
-     
+    
     if(command.equals("charge_a")){
       changeCellAState(CHARGE);
     } else if(command.equals("charge_b")){
@@ -135,3 +138,57 @@ void loop() {
     }
   }
 }
+
+/*
+    SS – digital 10
+    MOSI – digital 11
+    MISO – digital 12
+    SCK – digital 13
+*/
+
+//
+//#include "SPI.h" // necessary library
+////int SS=10; // using digital pin 10 for SPI slave select
+//
+//void setup()
+//{
+//  Serial.begin(9600);
+//  
+//  pinMode(10, OUTPUT); // we use this for SS pin
+//
+//  pinMode(PIN_CELL_A_CHARGE, OUTPUT);
+//  pinMode(PIN_CELL_A_DIR, OUTPUT);
+//
+//  digitalWrite(PIN_CELL_A_CHARGE, HIGH);
+//  digitalWrite(PIN_CELL_A_DIR, LOW);
+//  
+//  SPI.begin();
+//  SPI.setBitOrder(MSBFIRST);
+//  SPI.setDataMode(SPI_MODE2);  // Mode=2 CPOL=1, CPHA=0
+//}
+//
+///*
+//** the value associated with chan will be returned 
+//** during the next call to this function.
+//*/
+//int readADC(int chan)
+//{
+//  digitalWrite(10, LOW);
+//  int hi = SPI.transfer( chan << 3 );
+//  int lo = SPI.transfer( 0 );
+//  digitalWrite(10, HIGH);
+//  
+//  return ((hi << 8) | lo) << 1;
+//}
+//
+//void loop()
+//{ 
+//  for (int i=0; i<8; i++) {
+//    int chan = (i == 7) ? 0 : i+1;
+//    float val = getVolts(readADC(i));
+//    Serial.print(val);
+//    Serial.print("\t");
+//  }
+//  Serial.println("");
+//  
+//}

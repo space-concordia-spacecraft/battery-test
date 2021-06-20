@@ -3,6 +3,9 @@
 #include <chrono>
 #include <thread>
 
+#include <iomanip>
+#include <sstream>
+
 #include <QLabel>
 
 #include "Battery.h"
@@ -19,10 +22,10 @@ public:
     ~BatteryMonitor();
 
     void OnReceive(SerialData data) final;
-    void checkBattery(Battery battery, Battery secondaryBattery, std::chrono::steady_clock::time_point & currentMillis);
+    void checkBattery(Battery & battery, Battery & secondaryBattery, std::chrono::steady_clock::time_point & currentMillis);
 
-    QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelACharge, *m_LabelAStage;
-    QLabel *m_LabelBTemp, *m_LabelBCurrent, *m_LabelBVoltage, *m_LabelBCharge, *m_LabelBStage;
+    QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelACharge, *m_LabelAStage, *m_LabelAElapsed;
+    QLabel *m_LabelBTemp, *m_LabelBCurrent, *m_LabelBVoltage, *m_LabelBCharge, *m_LabelBStage, *m_LabelBElapsed;
 
     void Start();
     void Stop();
@@ -38,6 +41,8 @@ private:
     Battery m_BatteryA, m_BatteryB;
     CSVLogger m_Logger;
     float m_JigTemperature, m_VRef;
+
+    std::string stringifyDuration(std::chrono::seconds input_seconds);
 
     thread m_Thread;
     volatile bool m_Running = false;

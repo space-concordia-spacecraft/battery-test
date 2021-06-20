@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include "Utils.h"
 #include "SerialPort.h"
 
@@ -34,40 +35,41 @@ public:
 
     explicit Battery(SerialPort& port) : m_ArduinoPort(port) {}
 
-    int getGeneralState() const {
-        if(this->m_CurrentState == IDLE0 || this->m_CurrentState == IDLE1 || this->m_CurrentState == IDLE2 || this->m_CurrentState == IDLE3 || this->m_CurrentState == IDLE4)
+    int getGeneralStage() const {
+        if(this->m_CurrentStage == IDLE0 || this->m_CurrentStage == IDLE1 || this->m_CurrentStage == IDLE2 || this->m_CurrentStage == IDLE3 || this->m_CurrentStage == IDLE4)
             return IDLE;
-        else if(this->m_CurrentState == CHARGE1 || this->m_CurrentState == CHARGE2 || this->m_CurrentState == CHARGE3)
+        else if(this->m_CurrentStage == CHARGE1 || this->m_CurrentStage == CHARGE2 || this->m_CurrentStage == CHARGE3)
             return CHARGING;
-        else
+        else if(this->m_CurrentStage == DISCHARGE1 || this->m_CurrentStage == DISCHARGE2)
             return DISCHARGING;
     };
 
     bool isIdle() const {
-        return this->m_CurrentState == IDLE0 || this->m_CurrentState == IDLE1 || this->m_CurrentState == IDLE2 || this->m_CurrentState == IDLE3 || this->m_CurrentState == IDLE4;
+        return this->m_CurrentStage == IDLE0 || this->m_CurrentStage == IDLE1 || this->m_CurrentStage == IDLE2 || this->m_CurrentStage == IDLE3 || this->m_CurrentStage == IDLE4;
     }
 
     void charge() {
-        m_ArduinoPort.writeSerialPort((std::string(COMMAND_CHARGE) + m_Letter).c_str());
+        m_ArduinoPort.writeSerialPort((std::string(COMMAND_CHARGE) + m_Letter + "\n").c_str());
     }
 
     void discharge() {
-        m_ArduinoPort.writeSerialPort((std::string(COMMAND_DISCHARGE) + m_Letter).c_str());
+        m_ArduinoPort.writeSerialPort((std::string(COMMAND_DISCHARGE) + m_Letter + "\n").c_str());
     }
 
     void idle() {
-        m_ArduinoPort.writeSerialPort((std::string(COMMAND_IDLE) + m_Letter).c_str());
+        m_ArduinoPort.writeSerialPort((std::string(COMMAND_IDLE) + m_Letter + "\n").c_str());
     }
 
     void goNext() {
-        m_CurrentState = ( m_CurrentState + 1 ) % 9;
+        m_CurrentStage = (m_CurrentStage + 1 ) % 9;
 
-        int state = this->getGeneralState();
-        if(state == CHARGING) {
+        int stage = this->getGeneralStage();
+
+        if(stage == CHARGING) {
             charge();
-        } else if(state == DISCHARGING) {
+        } else if(stage == DISCHARGING) {
             discharge();
-        } else if (state == IDLE) {
+        } else if (stage == IDLE) {
             idle();
         }
     }
@@ -89,8 +91,8 @@ public:
         this->m_IdleCurrent = data;
     }
 
-    void setState(int state) {
-        this->m_CurrentState = state;
+    void setStage(int stage) {
+        this->m_CurrentStage = stage;
     }
 
     void setCompleted(bool completed) {
@@ -113,6 +115,22 @@ public:
         return this->m_Temperature;
     }
 
+    std::string getLetter() const {
+        return this->m_Letter;
+    }
+
+    std::string getStageText() const {
+        if(this->getGeneralStage() == CHARGING) {
+            return "Charging";
+        } else if(this->getGeneralStage() == DISCHARGING) {
+            return "Discharging";
+        } else if(this->getGeneralStage() == IDLE) {
+            return "Idle";
+        } else {
+            return "ERROR";
+        }
+    }
+
     float getVolt() const {
         return this->m_Voltage;
     }
@@ -125,8 +143,12 @@ public:
         return this->m_IdleCurrent;
     }
 
+    float getCharge() const {
+        return this->m_Charge;
+    }
+
     int getState() const {
-        return this->m_CurrentState;
+        return this->m_CurrentStage;
     }
 
     bool isCompleted() const {
@@ -138,7 +160,7 @@ public:
     }
 
 private:
-    int m_CurrentState = CHARGE1;
+    int m_CurrentStage = IDLE0;
 
     std::string m_Letter;
     SerialPort & m_ArduinoPort;
