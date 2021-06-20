@@ -30,7 +30,10 @@
 #define DISCHARGE 1
 #define SLEEP 2
 
+#define WATCHDOG_TIMER 1000
+
 float vref = 5.0f;
+unsigned long currentMillis;
 
 /** 
  * Function to get voltage depending on a value
@@ -99,6 +102,8 @@ void setup() {
 
   pinMode(PIN_BUZZER, OUTPUT);
 
+  currentMillis = millis();
+  
   SPI.begin();
   SPI.setBitOrder(MSBFIRST); // this could be MSBFIRST or LSBFIRST
   SPI.setDataMode(SPI_MODE2);  // Mode=2 CPOL=1, CPHA=0
@@ -108,6 +113,11 @@ void setup() {
 
 void loop() {
 
+  if(millis() - currentMillis > WATCHDOG_TIMER) { 
+    changeCellAStage(SLEEP);
+    changeCellBStage(SLEEP);
+  }
+  
   vref = analogRead(CHAN_VREF)*(3.0607 * 2.5 / 1024.0);
   
   for (int i=0; i<8; i++) {
@@ -118,6 +128,8 @@ void loop() {
       Serial.print(",");
   }
   Serial.println(";");
+
+  
   
   // If there is a command available, parse it
   if(Serial.available()){
@@ -135,60 +147,10 @@ void loop() {
       changeCellAState(SLEEP);
     } else if(command.equals("idle_b")) {
       changeCellBState(SLEEP);
+    } else if(command.equals("ping")) {
+      currentMillis = millis();
     }
   }
+
+  
 }
-
-/*
-    SS – digital 10
-    MOSI – digital 11
-    MISO – digital 12
-    SCK – digital 13
-*/
-
-//
-//#include "SPI.h" // necessary library
-////int SS=10; // using digital pin 10 for SPI slave select
-//
-//void setup()
-//{
-//  Serial.begin(9600);
-//  
-//  pinMode(10, OUTPUT); // we use this for SS pin
-//
-//  pinMode(PIN_CELL_A_CHARGE, OUTPUT);
-//  pinMode(PIN_CELL_A_DIR, OUTPUT);
-//
-//  digitalWrite(PIN_CELL_A_CHARGE, HIGH);
-//  digitalWrite(PIN_CELL_A_DIR, LOW);
-//  
-//  SPI.begin();
-//  SPI.setBitOrder(MSBFIRST);
-//  SPI.setDataMode(SPI_MODE2);  // Mode=2 CPOL=1, CPHA=0
-//}
-//
-///*
-//** the value associated with chan will be returned 
-//** during the next call to this function.
-//*/
-//int readADC(int chan)
-//{
-//  digitalWrite(10, LOW);
-//  int hi = SPI.transfer( chan << 3 );
-//  int lo = SPI.transfer( 0 );
-//  digitalWrite(10, HIGH);
-//  
-//  return ((hi << 8) | lo) << 1;
-//}
-//
-//void loop()
-//{ 
-//  for (int i=0; i<8; i++) {
-//    int chan = (i == 7) ? 0 : i+1;
-//    float val = getVolts(readADC(i));
-//    Serial.print(val);
-//    Serial.print("\t");
-//  }
-//  Serial.println("");
-//  
-//}

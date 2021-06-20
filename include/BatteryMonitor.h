@@ -40,6 +40,7 @@ private:
     SerialPort & m_ArduinoPort;
     Battery m_BatteryA, m_BatteryB;
     CSVLogger m_Logger;
+    std::chrono::time_point m_LastReceived;
     float m_JigTemperature, m_VRef;
 
     std::string stringifyDuration(std::chrono::seconds input_seconds);

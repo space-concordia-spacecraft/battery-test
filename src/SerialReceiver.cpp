@@ -27,6 +27,7 @@ void SerialReceiver::Stop() {
 
 void SerialReceiver::Run() {
     while (m_Running) {
+
         if (m_ArduinoPort.isConnected() && m_Listener != nullptr) {
             // Read next serial line and split at commas
             string serialStr = ReadNext();

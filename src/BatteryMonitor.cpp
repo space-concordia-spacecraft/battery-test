@@ -24,7 +24,6 @@ BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port)
     m_BatteryB.setLetter("b");
 
     m_Logger.Init();
-
 }
 
 BatteryMonitor::~BatteryMonitor() {
@@ -33,6 +32,7 @@ BatteryMonitor::~BatteryMonitor() {
 
 void BatteryMonitor::OnReceive(SerialData data) {
     // Store results in m_BatteryA and m_BatteryB
+    m_LastReceived = std::chrono::high_resolution_clock::now();
 
     if (m_BatteryA.isIdle()) {
         m_BatteryA.setIdleCurrent(data.m_CellA_IM);
@@ -108,7 +108,22 @@ void BatteryMonitor::Run() {
 
     auto lastLog = std::chrono::high_resolution_clock::now();
 
+    m_LastReceived = std::chrono::high_resolution_clock::now();
+
     while (m_Running && (!m_BatteryA.isCompleted() || !m_BatteryB.isCompleted())) {
+
+        auto now = std::chrono::high_resolution_clock::now();
+
+        m_ArduinoPort.writeSerialPort("ping\n");
+
+        if(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - m_LastReceived) >= 1) {
+            m_BatteryA.idle();
+            m_BatteryB.idle();
+
+            m_Logger.Close();
+
+            Stop();
+        }
 
         checkBattery(m_BatteryA, m_BatteryB, currentMillisA);
         checkBattery(m_BatteryB, m_BatteryA, currentMillisB);
@@ -119,7 +134,7 @@ void BatteryMonitor::Run() {
             lastLog = std::chrono::high_resolution_clock::now();
         }
 
-        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
 }
 
