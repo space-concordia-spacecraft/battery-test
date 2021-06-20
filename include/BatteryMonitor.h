@@ -3,21 +3,22 @@
 #include <chrono>
 #include <thread>
 
+#include <QLabel>
+
 #include "Battery.h"
 #include "SerialReceiver.h"
 #include "SerialPort.h"
+#include "CSVLogger.h"
 #include "MainWindow.h"
-#include <QLabel>
 
 class BatteryMonitor : public SerialListener {
     friend class MainWindow;
 
 public:
     explicit BatteryMonitor(MainWindow & w, SerialPort & port);
+    ~BatteryMonitor();
 
     void OnReceive(SerialData data) final;
-    void startCharging();
-    float m_JigTemperature, m_VRef;
     void checkBattery(Battery battery, Battery secondaryBattery, std::chrono::steady_clock::time_point & currentMillis);
 
     QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelACharge, *m_LabelAStage;
@@ -27,10 +28,16 @@ public:
     void Stop();
     void Run();
 
+    float getJigTemp() const {
+        return m_JigTemperature;
+    }
+
 private:
     MainWindow & m_Window;
     SerialPort & m_ArduinoPort;
     Battery m_BatteryA, m_BatteryB;
+    CSVLogger m_Logger;
+    float m_JigTemperature, m_VRef;
 
     thread m_Thread;
     volatile bool m_Running = false;

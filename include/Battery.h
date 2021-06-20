@@ -34,7 +34,7 @@ public:
 
     explicit Battery(SerialPort& port) : m_ArduinoPort(port) {}
 
-    int getGeneralState() {
+    int getGeneralState() const {
         if(this->m_CurrentState == IDLE0 || this->m_CurrentState == IDLE1 || this->m_CurrentState == IDLE2 || this->m_CurrentState == IDLE3 || this->m_CurrentState == IDLE4)
             return IDLE;
         else if(this->m_CurrentState == CHARGE1 || this->m_CurrentState == CHARGE2 || this->m_CurrentState == CHARGE3)
@@ -43,7 +43,7 @@ public:
             return DISCHARGING;
     };
 
-    bool isIdle() {
+    bool isIdle() const {
         return this->m_CurrentState == IDLE0 || this->m_CurrentState == IDLE1 || this->m_CurrentState == IDLE2 || this->m_CurrentState == IDLE3 || this->m_CurrentState == IDLE4;
     }
 
@@ -78,11 +78,11 @@ public:
 
     void setVoltage(float data) {
         this->m_Voltage = data;
-        this->m_Charge = 100.0 * ( data - LOWEST_VOLTAGE )/( HIGHEST_VOLTAGE - LOWEST_VOLTAGE );
+        this->m_Charge = 100.0f * ( data - LOWEST_VOLTAGE )/( HIGHEST_VOLTAGE - LOWEST_VOLTAGE );
     }
 
     void setCurrent(float data) {
-        this->m_Current = ( data - this->m_IdleCurrent ) / 0.681;
+        this->m_Current = ( data - this->m_IdleCurrent ) / 0.681f;
     }
 
     void setIdleCurrent(float data) {
@@ -101,39 +101,39 @@ public:
         this->m_ReadyForNext = ready;
     }
 
-    void setArduinoPort(SerialPort port) {
+    void setArduinoPort(SerialPort& port) {
         this->m_ArduinoPort = port;
     }
 
-    void setLetter(std::string letter) {
+    void setLetter(const std::string& letter) {
         this->m_Letter = letter;
     }
 
-    float getTemp() {
+    float getTemp() const {
         return this->m_Temperature;
     }
 
-    float getVolt() {
+    float getVolt() const {
         return this->m_Voltage;
     }
 
-    float getCurrent() {
+    float getCurrent() const {
         return this->m_Current;
     }
 
-    float getIdleCurrent() {
+    float getIdleCurrent() const {
         return this->m_IdleCurrent;
     }
 
-    int getState() {
+    int getState() const {
         return this->m_CurrentState;
     }
 
-    bool isCompleted() {
+    bool isCompleted() const {
         return this->m_Completed;
     }
 
-    bool isReadyForNext() {
+    bool isReadyForNext() const {
         return this->m_ReadyForNext;
     }
 

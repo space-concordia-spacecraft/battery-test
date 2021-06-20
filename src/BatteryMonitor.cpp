@@ -1,6 +1,8 @@
 #include "BatteryMonitor.h"
 
-BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port) : m_Window(w), m_ArduinoPort(port), m_BatteryA(port), m_BatteryB(port) {
+BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port)
+    : m_Window(w), m_ArduinoPort(port), m_BatteryA(port), m_BatteryB(port) {
+
     m_LabelAVoltage = m_Window.findChild<QLabel*>("cell_a_voltage");
     m_LabelACurrent = m_Window.findChild<QLabel*>("cell_a_current");
     m_LabelATemp = m_Window.findChild<QLabel*>("cell_a_temperature");
@@ -18,6 +20,13 @@ BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port) : m_Window(w), m
 
     m_BatteryA.setLetter("a");
     m_BatteryB.setLetter("b");
+
+    m_Logger.Init();
+
+}
+
+BatteryMonitor::~BatteryMonitor() {
+    m_Logger.Close();
 }
 
 void BatteryMonitor::OnReceive(SerialData data) {
@@ -53,10 +62,8 @@ void BatteryMonitor::OnReceive(SerialData data) {
 }
 
 void BatteryMonitor::Start() {
-    if(m_Running == true)
+    if(m_Running)
         return;
-    m_Running = true;
-    m_Thread = thread(&BatteryMonitor::Run, this);
 
     m_BatteryA.setState(Battery::CHARGE1);
     m_BatteryB.setState(Battery::IDLE0);
@@ -66,9 +73,15 @@ void BatteryMonitor::Start() {
 
     m_BatteryA.charge();
     m_BatteryB.idle();
+
+    m_Running = true;
+    m_Thread = thread(&BatteryMonitor::Run, this);
 }
 
 void BatteryMonitor::Stop() {
+    if (!m_Running)
+        return;
+
     m_BatteryA.setState(Battery::IDLE0);
     m_BatteryB.setState(Battery::IDLE0);
 
@@ -86,10 +99,18 @@ void BatteryMonitor::Run() {
     auto currentMillisA = std::chrono::high_resolution_clock::now();
     auto currentMillisB = std::chrono::high_resolution_clock::now();
 
+    auto lastLog = std::chrono::high_resolution_clock::now();
+
     while (m_Running && (!m_BatteryA.isCompleted() || !m_BatteryB.isCompleted())) {
 
         checkBattery(m_BatteryA, m_BatteryB, currentMillisA);
         checkBattery(m_BatteryB, m_BatteryA, currentMillisB);
+
+        auto now = std::chrono::high_resolution_clock::now();
+        if (std::chrono::duration_cast<std::chrono::seconds>(now - lastLog).count() >= 10) {
+            m_Logger.LogState(m_BatteryA, m_BatteryB, *this);
+            lastLog = std::chrono::high_resolution_clock::now();
+        }
 
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
