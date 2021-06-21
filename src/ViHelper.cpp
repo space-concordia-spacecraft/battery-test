@@ -13,18 +13,8 @@ void ViHelper::init() {
     ViUInt32 nmatches;
     ViFindList list;
     viOpenDefaultRM(&m_DefaultRM);
-
-    std::cout << m_DefaultRM << std::endl;
-
     viFindRsrc(m_DefaultRM, ViString("USB?*"), &list, &nmatches, matches);
-
-    std::cout << list << std::endl;
-    std::cout << nmatches << std::endl;
-    std::cout << matches << std::endl;
-
     viOpen(m_DefaultRM, matches, VI_NULL, VI_NULL, &m_Vi);
-
-    std::cout << m_Vi << std::endl;
 
     viPrintf(m_Vi, ViString(":SOUR:SENS 1\n"));
     printParameter(":SOUR:SENS?\n");
@@ -60,7 +50,7 @@ void ViHelper::init() {
 void ViHelper::printParameter(const char* param) {
     char buf[256] = { 0 };
     viPrintf(m_Vi, ViString(param));
-    viScanf(m_Vi, ViString("%t\n"), &buf);
+    viScanf(m_Vi, ViString("%t"), &buf);
     std::cout << buf << std::endl;
 }
 
