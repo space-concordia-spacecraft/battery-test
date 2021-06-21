@@ -42,6 +42,8 @@ public:
             return CHARGING;
         else if(this->m_CurrentStage == DISCHARGE1 || this->m_CurrentStage == DISCHARGE2)
             return DISCHARGING;
+        else
+            return -1;
     };
 
     bool isIdle() const {

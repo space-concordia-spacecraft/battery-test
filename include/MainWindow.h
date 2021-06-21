@@ -5,6 +5,8 @@
 
 #include "SerialReceiver.h"
 
+class BatteryMonitor;
+
 namespace Ui {
     class MainWindow;
 }
@@ -12,22 +14,19 @@ namespace Ui {
 class MainWindow : public QMainWindow {
 Q_OBJECT
 
-    MainWindow(QWidget *parent);
-
-
 public:
     explicit MainWindow(SerialReceiver* receiver, QWidget* parent = nullptr);
-
+    void setBatteryMonitor(BatteryMonitor * batteryMonitor);
     ~MainWindow() override;
-    void setStartCallBack(std::function<void(void)> startCallBack) { this->m_StartCallBack = startCallBack; }
 
 private:
     Ui::MainWindow* ui;
     SerialReceiver* m_receiver;
-    std::function<void(void)> m_StartCallBack;
-
+    BatteryMonitor* m_BatteryMonitor;
 
 private slots:
     void OnChangeArduinoPort(int index);
-    void OnclickStart(bool checked);
+    void OnClickStart(bool checked);
+    void OnSpinBoxChanged(int val);
+    void OnClickStop(bool checked);
 };

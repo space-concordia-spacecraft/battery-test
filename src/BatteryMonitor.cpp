@@ -69,6 +69,10 @@ void BatteryMonitor::OnReceive(SerialData data) {
 
 }
 
+void BatteryMonitor::setIdleDuration(int val) {
+    this->m_IdleDuration = val;
+}
+
 void BatteryMonitor::Start() {
     if(m_Running)
         return;

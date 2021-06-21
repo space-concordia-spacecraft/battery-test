@@ -1,5 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
+#include "BatteryMonitor.h"
 
 #include <iostream>
 
@@ -29,19 +30,31 @@ MainWindow::MainWindow(SerialReceiver* receiver, QWidget* parent) :
 {
     ui->setupUi(this);
     connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(OnChangeArduinoPort(int)));
-    connect(ui->startButton, SIGNAL(clicked(bool)), this, SLOT(OnclickStart(bool)));
-
-
+    connect(ui->startButton, SIGNAL(clicked(bool)), this, SLOT(OnClickStart(bool)));
+    connect(ui->stopButton, SIGNAL(clicked(bool)), this, SLOT(OnClickStop(bool)));
+    connect(ui->duration, SIGNAL(valueChanged(int)), this, SLOT(OnSpinBoxChanged(int)));
 }
 
 MainWindow::~MainWindow() {
     delete ui;
 }
 
+void MainWindow::setBatteryMonitor(BatteryMonitor * batteryMonitor) {
+    m_BatteryMonitor = batteryMonitor;
+}
+
 void MainWindow::OnChangeArduinoPort(int index) {
     m_receiver->SetArduinoPort(COM_PORTS[index]);
 }
-void MainWindow::OnclickStart(bool checked) {
-    if (m_StartCallBack)
-        m_StartCallBack();
+
+void MainWindow::OnSpinBoxChanged(int val) {
+    m_BatteryMonitor->setIdleDuration(val);
+}
+
+void MainWindow::OnClickStart(bool checked) {
+    m_BatteryMonitor->Start();
+}
+
+void MainWindow::OnClickStop(bool checked) {
+    m_BatteryMonitor->Stop();
 }

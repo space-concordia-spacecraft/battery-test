@@ -31,6 +31,8 @@ public:
     void Stop();
     void Run();
 
+    void setIdleDuration(int val);
+
     float getJigTemp() const {
         return m_JigTemperature;
     }
@@ -41,6 +43,7 @@ private:
     Battery m_BatteryA, m_BatteryB;
     CSVLogger m_Logger;
     ViHelper m_Vi;
+    int m_IdleDuration;
     std::chrono::time_point<std::chrono::steady_clock> m_LastReceived;
     float m_JigTemperature, m_VRef;
 
