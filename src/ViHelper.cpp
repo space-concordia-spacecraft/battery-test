@@ -57,7 +57,7 @@ void ViHelper::init() {
     printParameter(":SOUR:BATT:TIM?\n");
 }
 
-void ViHelper::printParameter(char* param) {
+void ViHelper::printParameter(const char* param) {
     char buf[256] = { 0 };
     viPrintf(m_Vi, ViString(param));
     viScanf(m_Vi, ViString("%t\n"), &buf);

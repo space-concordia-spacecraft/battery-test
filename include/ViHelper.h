@@ -13,7 +13,7 @@ public:
     void init();
     void close();
 
-    void printParameter(char * param);
+    void printParameter(const char * param);
 
 private:
     ViSession m_Vi, m_DefaultRM;
