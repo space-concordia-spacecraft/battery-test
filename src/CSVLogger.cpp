@@ -2,7 +2,8 @@
 #include "BatteryMonitor.h"
 
 void CSVLogger::Init() {
-    log.open("./log.csv");
+    long timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count();
+    log.open("./log-" + std::to_string(timestamp) + ".csv");
     if (!log.is_open()) {
         std::cout << "ERROR: Could not open log file." << std::endl;
         return;

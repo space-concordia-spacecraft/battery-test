@@ -23,7 +23,6 @@ BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port)
     m_BatteryA.setLetter("a");
     m_BatteryB.setLetter("b");
 
-    m_Logger.Init();
     m_Vi.init();
 }
 
@@ -81,6 +80,8 @@ void BatteryMonitor::Start() {
 
     m_BatteryA.setCompleted(false);
     m_BatteryB.setCompleted(false);
+
+    m_Logger.Init();
 
     m_Running = true;
     m_Thread = thread(&BatteryMonitor::Run, this);
@@ -141,6 +142,9 @@ void BatteryMonitor::Run() {
 
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
     }
+
+    m_Running = false;
+    m_Logger.Close();
 }
 
 void BatteryMonitor::checkBattery(Battery & battery, Battery & secondaryBattery, std::chrono::steady_clock::time_point & currentMillis) {
