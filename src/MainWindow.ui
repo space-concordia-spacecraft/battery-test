@@ -38,7 +38,7 @@
      <string notr="true">background-color: rgb(247, 246, 244);</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -48,9 +48,9 @@
       <property name="geometry">
        <rect>
         <x>580</x>
-        <y>90</y>
-        <width>121</width>
-        <height>51</height>
+        <y>100</y>
+        <width>131</width>
+        <height>61</height>
        </rect>
       </property>
       <property name="font">
@@ -79,9 +79,9 @@
       <property name="geometry">
        <rect>
         <x>580</x>
-        <y>30</y>
-        <width>121</width>
-        <height>51</height>
+        <y>20</y>
+        <width>131</width>
+        <height>61</height>
        </rect>
       </property>
       <property name="font">
@@ -813,6 +813,41 @@
       </property>
       <property name="text">
        <string>Arduino Port</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>130</y>
+        <width>151</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Idle Duration</string>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="duration">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>170</y>
+        <width>151</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>14</pointsize>
+       </font>
       </property>
      </widget>
     </widget>

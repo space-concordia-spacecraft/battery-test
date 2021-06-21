@@ -13,9 +13,9 @@
 #include "SerialPort.h"
 #include "CSVLogger.h"
 #include "MainWindow.h"
+#include "ViHelper.h"
 
 class BatteryMonitor : public SerialListener {
-    friend class MainWindow;
 
 public:
     explicit BatteryMonitor(MainWindow & w, SerialPort & port);
@@ -40,7 +40,8 @@ private:
     SerialPort & m_ArduinoPort;
     Battery m_BatteryA, m_BatteryB;
     CSVLogger m_Logger;
-    std::chrono::time_point m_LastReceived;
+    ViHelper m_Vi;
+    std::chrono::time_point<std::chrono::steady_clock> m_LastReceived;
     float m_JigTemperature, m_VRef;
 
     std::string stringifyDuration(std::chrono::seconds input_seconds);

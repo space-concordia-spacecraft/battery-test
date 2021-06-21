@@ -24,6 +24,7 @@ BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port)
     m_BatteryB.setLetter("b");
 
     m_Logger.Init();
+    m_Vi.init();
 }
 
 BatteryMonitor::~BatteryMonitor() {
@@ -89,6 +90,8 @@ void BatteryMonitor::Stop() {
     if (!m_Running)
         return;
 
+    m_Vi.close();
+
     m_BatteryA.setStage(Battery::IDLE0);
     m_BatteryB.setStage(Battery::IDLE0);
 
@@ -107,16 +110,17 @@ void BatteryMonitor::Run() {
     auto currentMillisB = std::chrono::high_resolution_clock::now();
 
     auto lastLog = std::chrono::high_resolution_clock::now();
+    auto now = std::chrono::high_resolution_clock::now();
 
     m_LastReceived = std::chrono::high_resolution_clock::now();
 
     while (m_Running && (!m_BatteryA.isCompleted() || !m_BatteryB.isCompleted())) {
 
-        auto now = std::chrono::high_resolution_clock::now();
+        now = std::chrono::high_resolution_clock::now();
 
         m_ArduinoPort.writeSerialPort("ping\n");
 
-        if(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - m_LastReceived) >= 1) {
+        if(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - m_LastReceived).count() >= 1) {
             m_BatteryA.idle();
             m_BatteryB.idle();
 
@@ -128,7 +132,8 @@ void BatteryMonitor::Run() {
         checkBattery(m_BatteryA, m_BatteryB, currentMillisA);
         checkBattery(m_BatteryB, m_BatteryA, currentMillisB);
 
-        auto now = std::chrono::high_resolution_clock::now();
+        now = std::chrono::high_resolution_clock::now();
+
         if (std::chrono::duration_cast<std::chrono::seconds>(now - lastLog).count() >= 10) {
             m_Logger.LogState(m_BatteryA, m_BatteryB, *this);
             lastLog = std::chrono::high_resolution_clock::now();
@@ -147,8 +152,8 @@ void BatteryMonitor::checkBattery(Battery & battery, Battery & secondaryBattery,
         battery.goNext();
         // restart timer
         currentMillis = std::chrono::high_resolution_clock::now();
-
     } else if (battery.getGeneralStage() == Battery::DISCHARGING && battery.getVolt() <= Battery::LOWEST_VOLTAGE) {
+        m_Vi.stopLoad();
         battery.goNext();
         // restart timer
         currentMillis = std::chrono::high_resolution_clock::now();
@@ -171,6 +176,9 @@ void BatteryMonitor::checkBattery(Battery & battery, Battery & secondaryBattery,
 
             battery.setReadyForNext(false);
             secondaryBattery.setReadyForNext(false);
+
+            if(battery.getGeneralStage() == Battery::DISCHARGING || secondaryBattery.getGeneralStage() == Battery::DISCHARGING)
+                m_Vi.startLoad();
         }
     }
 }
