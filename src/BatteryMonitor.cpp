@@ -174,7 +174,7 @@ void BatteryMonitor::checkBattery(Battery & battery, Battery & secondaryBattery,
             m_LabelBElapsed->setText(QString::fromStdString(stringifyDuration(elapsed)));
         }
 
-        if(elapsed.count() >= 10) {
+        if(elapsed.count() >= m_IdleDuration) {
             battery.setReadyForNext(true);
         }
 
