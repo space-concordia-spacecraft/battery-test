@@ -63,3 +63,12 @@ void ViHelper::stopLoad() {
     viPrintf(m_Vi, ViString(":SOUR:INP:STAT 0\n"));
     printParameter(":SOUR:INP:STAT?\n");
 }
+
+const char* ViHelper::getCapacity() {
+    char buf[256] = { 0 };
+
+    viPrintf(m_Vi, ViString(":FETC:CAP?\n"));
+    viScanf(m_Vi, ViString("%t"), &buf);
+
+    return buf;
+}

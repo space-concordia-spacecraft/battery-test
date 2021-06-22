@@ -27,6 +27,8 @@ public:
     QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelACharge, *m_LabelAStage, *m_LabelAElapsed;
     QLabel *m_LabelBTemp, *m_LabelBCurrent, *m_LabelBVoltage, *m_LabelBCharge, *m_LabelBStage, *m_LabelBElapsed;
 
+    ViHelper m_Vi;
+
     void Start();
     void Stop();
     void Run();
@@ -42,7 +44,6 @@ private:
     SerialPort & m_ArduinoPort;
     Battery m_BatteryA, m_BatteryB;
     CSVLogger m_Logger;
-    ViHelper m_Vi;
     int m_IdleDuration;
     std::chrono::time_point<std::chrono::steady_clock> m_LastReceived;
     float m_JigTemperature, m_VRef;

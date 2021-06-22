@@ -15,6 +15,8 @@ public:
 
     void printParameter(const char * param);
 
+    const char * getCapacity();
+
 private:
     ViSession m_Vi, m_DefaultRM;
 };
