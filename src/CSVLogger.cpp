@@ -17,8 +17,7 @@ void CSVLogger::Init() {
     log << "Battery B Current,";
     log << "Battery B Temperature,";
 
-    log << "Jig Temperature";
-
+    log << "Jig Temperature,";
     log << "Capacity" << std::endl;
 }
 
@@ -36,5 +35,6 @@ void CSVLogger::LogState(const Battery& batteryA, const Battery& batteryB, const
     log << batteryB.getTemp() << ",";
 
     log << batteryMonitor.getJigTemp() << ",";
-    log << viHelper.getCapacity() << std::endl;
+    viHelper.printCapactity(log);
+    log << std::endl;
 }

@@ -7,15 +7,15 @@
 class ViHelper {
 public:
 
-    void startLoad();
-    void stopLoad();
+    void startLoad() const;
+    void stopLoad() const;
 
     void init();
     void close();
 
-    void printParameter(const char * param);
+    void printParameter(const char* param, std::ostream& out = std::cout) const;
 
-    const char * getCapacity();
+    void printCapactity(std::ostream& out = std::cout) const;
 
 private:
     ViSession m_Vi, m_DefaultRM;

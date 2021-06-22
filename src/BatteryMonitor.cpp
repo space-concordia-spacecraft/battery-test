@@ -34,38 +34,57 @@ void BatteryMonitor::OnReceive(SerialData data) {
     // Store results in m_BatteryA and m_BatteryB
     m_LastReceived = std::chrono::high_resolution_clock::now();
 
-    if (m_BatteryA.isIdle()) {
-        m_BatteryA.setIdleCurrent(data.m_CellA_IM);
+    m_LastMeasurements[m_MeasurementCounter] = data;
+    if (m_MeasurementCounter == NUM_SAMPLES_TO_AVERAGE - 1) {
+        SerialData averageData{};
+        averageSerialData(&averageData);
+
+        if (m_BatteryA.isIdle()) {
+            m_BatteryA.setIdleCurrent(averageData.m_CellA_IM);
+        }
+
+        if (m_BatteryB.isIdle()) {
+            m_BatteryB.setIdleCurrent(averageData.m_CellB_IM);
+        }
+
+        m_BatteryA.setTemp(averageData.m_CellA_TM);
+        m_BatteryA.setVoltage(averageData.m_CellA_VM);
+        m_BatteryA.setCurrent(averageData.m_CellA_IM);
+
+        m_BatteryB.setTemp(averageData.m_CellB_TM);
+        m_BatteryB.setVoltage(averageData.m_CellB_VM);
+        m_BatteryB.setCurrent(averageData.m_CellB_IM);
+
+        m_JigTemperature = averageData.m_Jig_TM;
+        m_VRef = averageData.m_VRef;
+
+        static const int precision = 3;
+        m_LabelAVoltage->setText(QString::number(m_BatteryA.getVolt(), 'g', precision));
+        m_LabelATemp->setText(QString::number(m_BatteryA.getTemp(), 'g', precision));
+        m_LabelACurrent->setText(QString::number(m_BatteryA.getCurrent(), 'g', precision));
+        m_LabelACharge->setText(QString::number(m_BatteryA.getCharge(), 'g', precision));
+        m_LabelAStage->setText(QString::fromStdString(m_BatteryA.getStageText()));
+
+        m_LabelBVoltage->setText(QString::number(m_BatteryB.getVolt(), 'g', precision));
+        m_LabelBTemp->setText(QString::number(m_BatteryB.getTemp(), 'g', precision));
+        m_LabelBCurrent->setText(QString::number(m_BatteryB.getCurrent(), 'g', precision));
+        m_LabelBCharge->setText(QString::number(m_BatteryB.getCharge(), 'g', precision));
+        m_LabelBStage->setText(QString::fromStdString(m_BatteryB.getStageText()));
     }
 
-    if (m_BatteryB.isIdle()) {
-        m_BatteryB.setIdleCurrent(data.m_CellB_IM);
+    m_MeasurementCounter = (m_MeasurementCounter + 1) % NUM_SAMPLES_TO_AVERAGE;
+}
+
+void BatteryMonitor::averageSerialData(SerialData * data) {
+    *data = { 0, 0, 0, 0, 0, 0, 0, 0 };
+    for (auto & m_LastMeasurement : m_LastMeasurements) {
+        for (int j = 0; j < 8; j++) {
+            data->m_Data[j] += m_LastMeasurement.m_Data[j];
+        }
     }
-
-    m_BatteryA.setTemp(data.m_CellA_TM);
-    m_BatteryA.setVoltage(data.m_CellA_VM);
-    m_BatteryA.setCurrent(data.m_CellA_IM);
-
-    m_BatteryB.setTemp(data.m_CellB_TM);
-    m_BatteryB.setVoltage(data.m_CellB_VM);
-    m_BatteryB.setCurrent(data.m_CellB_IM);
-
-    this->m_JigTemperature = data.m_Jig_TM;
-    this->m_VRef = data.m_VRef;
-
-    static const int precision = 3;
-    m_LabelAVoltage->setText(QString::number(m_BatteryA.getVolt(), 'g', precision));
-    m_LabelATemp->setText(QString::number(m_BatteryA.getTemp(), 'g', precision));
-    m_LabelACurrent->setText(QString::number(m_BatteryA.getCurrent(), 'g', precision));
-    m_LabelACharge->setText(QString::number(m_BatteryA.getCharge(), 'g', precision));
-    m_LabelAStage->setText(QString::fromStdString(m_BatteryA.getStageText()));
-
-    m_LabelBVoltage->setText(QString::number(m_BatteryB.getVolt(), 'g', precision));
-    m_LabelBTemp->setText(QString::number(m_BatteryB.getTemp(), 'g', precision));
-    m_LabelBCurrent->setText(QString::number(m_BatteryB.getCurrent(), 'g', precision));
-    m_LabelBCharge->setText(QString::number(m_BatteryB.getCharge(), 'g', precision));
-    m_LabelBStage->setText(QString::fromStdString(m_BatteryB.getStageText()));
-
+    for (float & d : data->m_Data) {
+        d /= static_cast<float>(NUM_SAMPLES_TO_AVERAGE);
+    }
 }
 
 void BatteryMonitor::setIdleDuration(int val) {
@@ -140,7 +159,7 @@ void BatteryMonitor::Run() {
         now = std::chrono::high_resolution_clock::now();
 
         if (std::chrono::duration_cast<std::chrono::seconds>(now - lastLog).count() >= 10) {
-            m_Logger.LogState(m_BatteryA, m_BatteryB, *this);
+            m_Logger.LogState(m_BatteryA, m_BatteryB, *this, m_Vi);
             lastLog = std::chrono::high_resolution_clock::now();
         }
 
@@ -153,7 +172,7 @@ void BatteryMonitor::Run() {
 
 void BatteryMonitor::checkBattery(Battery & battery, Battery & secondaryBattery, std::chrono::steady_clock::time_point & currentMillis) {
 
-    if(battery.getGeneralStage() == Battery::CHARGING && battery.getVolt() >= Battery::HIGHEST_VOLTAGE) {
+    if(battery.getGeneralStage() == Battery::CHARGING && std::abs(battery.getCurrent()) <= Battery::LOWEST_CURRENT) {
         if(battery.getState() == Battery::CHARGE3) {
             battery.setCompleted(true);
         }
@@ -191,8 +210,7 @@ void BatteryMonitor::checkBattery(Battery & battery, Battery & secondaryBattery,
     }
 }
 
-std::string BatteryMonitor::stringifyDuration(std::chrono::seconds input_seconds)
-{
+std::string BatteryMonitor::stringifyDuration(std::chrono::seconds input_seconds) {
     using namespace std::chrono;
     auto h = duration_cast<hours>(input_seconds);
     input_seconds -= h;

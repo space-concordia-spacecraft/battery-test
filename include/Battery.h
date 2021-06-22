@@ -33,6 +33,8 @@ public:
     constexpr const static float LOWEST_VOLTAGE = 3.0f;
     constexpr const static float HIGHEST_VOLTAGE = 4.2f;
 
+    constexpr const static float LOWEST_CURRENT = 0.05f;
+
     explicit Battery(SerialPort& port) : m_ArduinoPort(port) {}
 
     int getGeneralStage() const {

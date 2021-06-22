@@ -47,28 +47,23 @@ void ViHelper::init() {
     printParameter(":SOUR:BATT:TIM?\n");
 }
 
-void ViHelper::printParameter(const char* param) {
+void ViHelper::printParameter(const char* param, std::ostream& out) const {
     char buf[256] = { 0 };
     viPrintf(m_Vi, ViString(param));
     viScanf(m_Vi, ViString("%t"), &buf);
-    std::cout << buf << std::endl;
+    out << buf << std::endl;
 }
 
-void ViHelper::startLoad() {
+void ViHelper::startLoad() const {
     viPrintf(m_Vi, ViString(":SOUR:INP:STAT 1\n"));
     printParameter(":SOUR:INP:STAT?\n");
 }
 
-void ViHelper::stopLoad() {
+void ViHelper::stopLoad() const {
     viPrintf(m_Vi, ViString(":SOUR:INP:STAT 0\n"));
     printParameter(":SOUR:INP:STAT?\n");
 }
 
-const char* ViHelper::getCapacity() {
-    char buf[256] = { 0 };
-
-    viPrintf(m_Vi, ViString(":FETC:CAP?\n"));
-    viScanf(m_Vi, ViString("%t"), &buf);
-
-    return buf;
+void ViHelper::printCapactity(std::ostream& out) const {
+    printParameter(":FETC:CAP?\n", out);
 }

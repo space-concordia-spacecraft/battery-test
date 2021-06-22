@@ -13,6 +13,8 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
+set(Qt5_USE_STATIC_LIBS ON)
+set(Qt5_USE_STATIC_RUNTIME ON)
 
 # Find the required library packages
 find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
