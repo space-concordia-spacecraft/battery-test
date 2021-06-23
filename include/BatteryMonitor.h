@@ -22,7 +22,10 @@ public:
     ~BatteryMonitor();
 
     void OnReceive(SerialData data) final;
-    void checkBattery(Battery & battery, Battery & secondaryBattery, std::chrono::steady_clock::time_point & currentMillis);
+    void checkBattery(Battery& battery,
+                      Battery& secondaryBattery,
+                      std::chrono::steady_clock::time_point& currentMillis,
+                      std::chrono::steady_clock::time_point& currentMillisSecondary);
 
     QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelACharge, *m_LabelAStage, *m_LabelAElapsed;
     QLabel *m_LabelBTemp, *m_LabelBCurrent, *m_LabelBVoltage, *m_LabelBCharge, *m_LabelBStage, *m_LabelBElapsed;
