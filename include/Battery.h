@@ -65,7 +65,8 @@ public:
     }
 
     void goNext() {
-        m_CurrentStage = (m_CurrentStage + 1 ) % 9;
+        if(m_CurrentStage != DONE)
+            m_CurrentStage = (m_CurrentStage + 1 ) % 11;
 
         int stage = this->getGeneralStage();
 
@@ -73,7 +74,7 @@ public:
             charge();
         } else if(stage == DISCHARGING) {
             discharge();
-        } else if (stage == IDLE) {
+        } else {
             idle();
         }
     }
@@ -131,7 +132,7 @@ public:
         } else if(this->getGeneralStage() == IDLE) {
             return "Idle";
         } else {
-            return "ERROR";
+            return "Complete";
         }
     }
 

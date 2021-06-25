@@ -21,6 +21,8 @@ int main(int argc, char** argv) {
 
     QApplication::exec();
 
+    batteryMonitor.Stop();
+
     receiver.Stop();
 
     return 0;

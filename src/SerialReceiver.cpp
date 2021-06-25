@@ -90,7 +90,7 @@ string SerialReceiver::ReadNext() {
         }
         ss << str;
         auto currentTime = std::chrono::system_clock::now();
-        long diff = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
+        long long diff = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime).count();
         if (diff > 100) {
             next = ss.str();
             return "";

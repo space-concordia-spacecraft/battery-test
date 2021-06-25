@@ -28,6 +28,7 @@ BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port)
 
 BatteryMonitor::~BatteryMonitor() {
     m_Logger.Close();
+    m_Vi.close();
 }
 
 void BatteryMonitor::OnReceive(SerialData data) {
@@ -108,13 +109,15 @@ void BatteryMonitor::Start() {
 
     m_Running = true;
     m_Thread = thread(&BatteryMonitor::Run, this);
+
+    std::cout << "Starting Battery Monitor" << std::endl;
 }
 
 void BatteryMonitor::Stop() {
     if (!m_Running)
         return;
 
-    m_Vi.close();
+    m_Vi.stopLoad();
 
     m_BatteryA.setStage(Battery::IDLE0);
     m_BatteryB.setStage(Battery::IDLE0);
@@ -127,6 +130,8 @@ void BatteryMonitor::Stop() {
 
     m_Running = false;
     m_Thread.join();
+
+    std::cout << "Stopping Battery Monitor" << std::endl;
 }
 
 void BatteryMonitor::Run() {
@@ -138,6 +143,10 @@ void BatteryMonitor::Run() {
 
     m_LastReceived = std::chrono::high_resolution_clock::now();
 
+    std::cout << "Running Battery Monitor" << std::endl;
+
+    m_ArduinoPort.writeSerialPort("ping\n");
+
     while (m_Running && (!m_BatteryA.isCompleted() || !m_BatteryB.isCompleted())) {
 
         now = std::chrono::high_resolution_clock::now();
@@ -145,11 +154,13 @@ void BatteryMonitor::Run() {
         m_ArduinoPort.writeSerialPort("ping\n");
 
         if (std::chrono::duration_cast<std::chrono::seconds>(
-                std::chrono::high_resolution_clock::now() - m_LastReceived).count() >= 1) {
+                std::chrono::high_resolution_clock::now() - m_LastReceived).count() >= 5) {
             m_BatteryA.idle();
             m_BatteryB.idle();
 
             m_Logger.Close();
+
+            std::cout << "ERROR: Haven't Received Message in a while" << std::endl;
 
             Stop();
         }
@@ -180,26 +191,32 @@ void BatteryMonitor::checkBattery(Battery& battery,
             std::chrono::high_resolution_clock::now() - currentMillis);
 
     if (battery.getGeneralStage() == Battery::CHARGING &&
-        std::abs(battery.getCurrent()) <= Battery::LOWEST_CURRENT &&
-        elapsed.count() >= 10) {
+        (std::abs(battery.getCurrent()) <= Battery::LOWEST_CURRENT ||
+        battery.getVolt() >= Battery::HIGHEST_VOLTAGE) &&
+        elapsed.count() >= 5) {
 
         if (battery.getState() == Battery::CHARGE3) {
             battery.setCompleted(true);
+            std::cout << "UPDATE: Test Completed" << std::endl;
         }
         battery.goNext();
         // restart timer
         currentMillis = std::chrono::high_resolution_clock::now();
 
+        std::cout << "UPDATE: Battery " << battery.getLetter() << " is now " << battery.getStageText() << "." << std::endl;
+
     } else if ( battery.getGeneralStage() == Battery::DISCHARGING &&
                 battery.getVolt() <= Battery::LOWEST_VOLTAGE &&
-                elapsed.count() >= 10) {
+                elapsed.count() >= 5) {
 
         m_Vi.stopLoad();
         battery.goNext();
         // restart timer
         currentMillis = std::chrono::high_resolution_clock::now();
 
-    } else if (battery.getGeneralStage() == Battery::IDLE) {
+        std::cout << "UPDATE: Battery " << battery.getLetter() << " is now " << battery.getStageText() << "." << std::endl;
+
+    } else if (battery.getGeneralStage() == Battery::IDLE || battery.isCompleted()) {
 
         if (battery.getLetter() == "a") {
             m_LabelAElapsed->setText(QString::fromStdString(stringifyDuration(elapsed)));
@@ -207,7 +224,7 @@ void BatteryMonitor::checkBattery(Battery& battery,
             m_LabelBElapsed->setText(QString::fromStdString(stringifyDuration(elapsed)));
         }
 
-        if (elapsed.count() >= m_IdleDuration) {
+        if (elapsed.count() >= m_IdleDuration || battery.isCompleted()) {
             battery.setReadyForNext(true);
         }
 
@@ -222,10 +239,18 @@ void BatteryMonitor::checkBattery(Battery& battery,
             battery.setReadyForNext(false);
             secondaryBattery.setReadyForNext(false);
 
+            std::cout << "UPDATE: Battery " << battery.getLetter() << " is now " << battery.getStageText() << "." << std::endl;
+
+
             if (battery.getGeneralStage() == Battery::DISCHARGING ||
-                secondaryBattery.getGeneralStage() == Battery::DISCHARGING)
+                secondaryBattery.getGeneralStage() == Battery::DISCHARGING) {
                 m_Vi.startLoad();
+                std::cout << "UPDATE: Starting Load." << std::endl;
+            }
+
         }
+
+    } else {
 
     }
 }

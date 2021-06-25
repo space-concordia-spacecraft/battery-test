@@ -30,7 +30,7 @@
 #define DISCHARGE 1
 #define SLEEP 2
 
-#define WATCHDOG_TIMER 1000
+#define WATCHDOG_TIMER 5000
 
 float vref = 5.0f;
 unsigned long currentMillis;
@@ -109,18 +109,18 @@ void setup() {
   SPI.setDataMode(SPI_MODE2);  // Mode=2 CPOL=1, CPHA=0
 
   analogReference(INTERNAL2V5);
+
 }
 
 void loop() {
 
   if(millis() - currentMillis > WATCHDOG_TIMER) { 
-    changeCellAStage(SLEEP);
-    changeCellBStage(SLEEP);
+    changeCellAState(SLEEP);
+    changeCellBState(SLEEP);
   }
   
   vref = analogRead(CHAN_VREF)*(3.0607 * 2.5 / 1024.0);
-  
-  for (int i=0; i<8; i++) {
+  for (int i=0; i < 8; i++) {
     int chan = (i == 7) ? 0 : i+1;
     float val = (i == 6) ? vref : readSPI(chan);
     Serial.print(val);
@@ -129,8 +129,6 @@ void loop() {
   }
   Serial.println(";");
 
-  
-  
   // If there is a command available, parse it
   if(Serial.available()){
     String command = Serial.readStringUntil('\n');

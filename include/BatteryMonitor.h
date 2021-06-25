@@ -47,7 +47,7 @@ private:
     CSVLogger m_Logger;
     ViHelper m_Vi;
 
-    int m_IdleDuration;
+    int m_IdleDuration = 600;
     std::chrono::time_point<std::chrono::steady_clock> m_LastReceived;
     float m_JigTemperature, m_VRef;
 
