@@ -33,6 +33,7 @@ MainWindow::MainWindow(SerialReceiver* receiver, QWidget* parent) :
     connect(ui->startButton, SIGNAL(clicked(bool)), this, SLOT(OnClickStart(bool)));
     connect(ui->stopButton, SIGNAL(clicked(bool)), this, SLOT(OnClickStop(bool)));
     connect(ui->duration, SIGNAL(valueChanged(int)), this, SLOT(OnSpinBoxChanged(int)));
+
 }
 
 MainWindow::~MainWindow() {

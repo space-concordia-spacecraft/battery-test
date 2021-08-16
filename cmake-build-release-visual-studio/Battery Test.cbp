@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Battery Test"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="msvc8"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\vcpkg\;CMake Files\..\vcpkg\scripts\;CMake Files\..\vcpkg\scripts\buildsystems\;CMake Files\..\vcpkg\installed\;CMake Files\..\vcpkg\installed\x64-windows\;CMake Files\..\vcpkg\installed\x64-windows\share\;CMake Files\..\vcpkg\installed\x64-windows\share\cmake\;CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5\;CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Core\;CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\;CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Widgets\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 all"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Battery">
+				<Option output="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio/Battery.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-DQT_CORE_LIB"/>
+					<Add option="-DQT_NO_DEBUG"/>
+					<Add option="-DQT_GUI_LIB"/>
+					<Add option="-DQT_WIDGETS_LIB"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/battery-test"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio/Battery_autogen/include"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/include"/>
+					<Add directory="C:/Program Files/IVI Foundation/VISA/Win64/Include"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/vcpkg/installed/x64-windows/include"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/vcpkg/installed/x64-windows/include/QtCore"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/vcpkg/installed/x64-windows/tools/qt5/mkspecs/win32-msvc"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/vcpkg/installed/x64-windows/include/QtGui"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/vcpkg/installed/x64-windows/include/QtWidgets"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 Battery"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Battery/fast">
+				<Option output="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio/Battery.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add option="-DQT_CORE_LIB"/>
+					<Add option="-DQT_NO_DEBUG"/>
+					<Add option="-DQT_GUI_LIB"/>
+					<Add option="-DQT_WIDGETS_LIB"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/battery-test"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio/Battery_autogen/include"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/include"/>
+					<Add directory="C:/Program Files/IVI Foundation/VISA/Win64/Include"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/vcpkg/installed/x64-windows/include"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/vcpkg/installed/x64-windows/include/QtCore"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/vcpkg/installed/x64-windows/tools/qt5/mkspecs/win32-msvc"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/vcpkg/installed/x64-windows/include/QtGui"/>
+					<Add directory="C:/Users/Ruben/OneDrive/Desktop/space/vcpkg/installed/x64-windows/include/QtWidgets"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.28.29910\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\winrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.19041.0\cppwinrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 Battery/fast"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 edit_cache"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Battery_autogen">
+				<Option working_dir="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 Battery_autogen"/>
+					<CompileFile command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f C:\Users\Ruben\OneDrive\Desktop\space\battery-test\cmake-build-release-visual-studio\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio/Battery_autogen/mocs_compilation.cpp">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/include/Battery.h">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/include/BatteryMonitor.h">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/include/CSVLogger.h">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/include/MainWindow.h">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/include/OldBattery.h">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/include/SerialPort.h">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/include/SerialReceiver.h">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/include/Utils.h">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/include/ViHelper.h">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/src/Battery.cpp">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/src/BatteryMonitor.cpp">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/src/CSVLogger.cpp">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/src/MainWindow.cpp">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/src/MainWindow.ui">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/src/SerialPort.cpp">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/src/SerialReceiver.cpp">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/src/Utils.cpp">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/src/ViHelper.cpp">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/src/main.cpp">
+			<Option target="Battery"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/scripts/buildsystems/vcpkg.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\scripts\buildsystems\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5/Qt5Config.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5/Qt5ConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5/Qt5ModuleLocation.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Core/Qt5CoreConfig.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Core\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Core/Qt5CoreConfigExtras.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Core\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Core/Qt5CoreConfigExtrasMkspecDir.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Core\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Core/Qt5CoreConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Core\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Core/Qt5CoreMacros.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Core\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5GuiConfig.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5GuiConfigExtras.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5GuiConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QGifPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QICNSPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QICOPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QJp2Plugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QJpegPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QMinimalIntegrationPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QOffscreenIntegrationPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QSvgIconPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QSvgPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QTgaPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QTiffPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QTuioTouchPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QWbmpPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QWebpPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QWindowsDirect2DIntegrationPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QWindowsIntegrationPlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Gui/Qt5Gui_QXdgDesktopPortalThemePlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Gui\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Widgets/Qt5WidgetsConfig.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Widgets\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Widgets/Qt5WidgetsConfigExtras.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Widgets\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Widgets/Qt5WidgetsConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Widgets\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Widgets/Qt5WidgetsMacros.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Widgets\"/>
+		</Unit>
+		<Unit filename="C:/Users/Ruben/OneDrive/Desktop/space/battery-test/../vcpkg/installed/x64-windows/share/cmake/Qt5Widgets/Qt5Widgets_QWindowsVistaStylePlugin.cmake">
+			<Option virtualFolder="CMake Files\..\vcpkg\installed\x64-windows\share\cmake\Qt5Widgets\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

@@ -18,17 +18,27 @@
 class BatteryMonitor : public SerialListener {
 
 public:
+    /**
+     * Constructor that initializes all labels, sets up the electronic load helper, and sets up the battery objects.
+     * @param w - Window object used for the labels.
+     * @param port - SerialPort object to communicate with the battery test jig hardware.
+     */
     explicit BatteryMonitor(MainWindow & w, SerialPort & port);
+
+    /**
+     * Destructor for the BatteryMonitor class. Destroys logger and electronic load helper.
+     */
     ~BatteryMonitor();
 
     void OnReceive(SerialData data) final;
-    void checkBattery(Battery& battery,
+    void UpdateBatteryData(Battery& battery, float temp, float current, float voltage);
+    void CheckBattery(Battery& battery,
                       Battery& secondaryBattery,
                       std::chrono::steady_clock::time_point& currentMillis,
                       std::chrono::steady_clock::time_point& currentMillisSecondary);
 
-    QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelACharge, *m_LabelAStage, *m_LabelAElapsed;
-    QLabel *m_LabelBTemp, *m_LabelBCurrent, *m_LabelBVoltage, *m_LabelBCharge, *m_LabelBStage, *m_LabelBElapsed;
+    QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelAStage, *m_LabelAElapsed;
+    QLabel *m_LabelBTemp, *m_LabelBCurrent, *m_LabelBVoltage, *m_LabelBStage, *m_LabelBElapsed;
 
     void Start();
     void Stop();
@@ -57,7 +67,7 @@ private:
 
     static std::string stringifyDuration(std::chrono::seconds input_seconds);
 
-    void averageSerialData(SerialData * data);
+    void AverageSerialData(SerialData * data);
 
     thread m_Thread;
     volatile bool m_Running = false;

@@ -1,0 +1,4 @@
+C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio/CMakeFiles/Battery.dir
+C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio/CMakeFiles/edit_cache.dir
+C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio/CMakeFiles/rebuild_cache.dir
+C:/Users/Ruben/OneDrive/Desktop/space/battery-test/cmake-build-release-visual-studio/CMakeFiles/Battery_autogen.dir

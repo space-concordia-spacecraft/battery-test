@@ -10,170 +10,195 @@
 
 #define COMMAND_IDLE "idle_"
 
-struct Battery {
-
+class Battery {
 public:
-    // Charge, Discharge, Charge, Discharge, Charge
-    const static int IDLE0 = 0;
-    const static int CHARGE1 = 1;
-    const static int IDLE1 = 2;
-    const static int DISCHARGE1 = 3;
-    const static int IDLE2 = 4;
-    const static int CHARGE2 = 5;
-    const static int IDLE3 = 6;
-    const static int DISCHARGE2 = 7;
-    const static int IDLE4 = 8;
-    const static int CHARGE3 = 9;
-    const static int DONE = 10;
 
+    /// Identifier for the CHARGING state
     const static int CHARGING = 0;
+
+    /// Identifier for the DISCHARGING state
     const static int DISCHARGING = 1;
+
+    /// Identifier for the IDLE state
     const static int IDLE = 2;
 
+    /// Lowest voltage allowed for the battery
     constexpr const static float LOWEST_VOLTAGE = 3.0f;
+
+    /// Highest voltage allowed for the battery
     constexpr const static float HIGHEST_VOLTAGE = 4.2f;
 
+    /// Lowest current allowed for the battery
     constexpr const static float LOWEST_CURRENT = 0.05f;
 
-    explicit Battery(SerialPort& port) : m_ArduinoPort(port) {}
+    /**
+     * Constructor to initialize a battery object.
+     * @param port - SerialPort object used to communicate to the Electronic Load
+     */
+    explicit Battery(SerialPort& port);
 
-    int getGeneralStage() const {
-        if(this->m_CurrentStage == IDLE0 || this->m_CurrentStage == IDLE1 || this->m_CurrentStage == IDLE2 || this->m_CurrentStage == IDLE3 || this->m_CurrentStage == IDLE4)
-            return IDLE;
-        else if(this->m_CurrentStage == CHARGE1 || this->m_CurrentStage == CHARGE2 || this->m_CurrentStage == CHARGE3)
-            return CHARGING;
-        else if(this->m_CurrentStage == DISCHARGE1 || this->m_CurrentStage == DISCHARGE2)
-            return DISCHARGING;
-        else
-            return -1;
-    };
+    /**
+     * Getter to obtain the current state of the battery.
+     * @return the identifier for the current state of the battery.
+     */
+    int GetState();
 
-    bool isIdle() const {
-        return this->m_CurrentStage == IDLE0 || this->m_CurrentStage == IDLE1 || this->m_CurrentStage == IDLE2 || this->m_CurrentStage == IDLE3 || this->m_CurrentStage == IDLE4;
-    }
+    /**
+     * Getter to get the current sequence state of the battery.
+     * @return the index of how far it is in the testing sequence.
+     */
+    int GetCurrentSequenceState();
 
-    void charge() {
-        m_ArduinoPort.writeSerialPort((std::string(COMMAND_CHARGE) + m_Letter + "\n").c_str());
-    }
+    /**
+     * Getter to get a label depending on the state of the battery.
+     * @return Current state of the battery in String format.
+     */
+    std::string GetSequenceStateLabel();
 
-    void discharge() {
-        m_ArduinoPort.writeSerialPort((std::string(COMMAND_DISCHARGE) + m_Letter + "\n").c_str());
-    }
+    /**
+     * Updates the current state of the battery.
+     */
+    void CompleteState();
 
-    void idle() {
-        m_ArduinoPort.writeSerialPort((std::string(COMMAND_IDLE) + m_Letter + "\n").c_str());
-    }
+    /**
+     * Function to determine whether or not the battery has completed the testing sequence.
+     * @return true if battery completed the full sequence.
+     */
+    bool IsCompleted();
 
-    void goNext() {
-        if(m_CurrentStage != DONE)
-            m_CurrentStage = (m_CurrentStage + 1 ) % 11;
+    /**
+     * Function to determine whether the battery is ready to go to the next state.
+     * @return true if the battery is ready to go to the next state.
+     */
+    bool IsReady();
 
-        int stage = this->getGeneralStage();
+    /**
+     * Function to start testing the battery depending on the state of the battery.
+     */
+    void StartStateTest();
 
-        if(stage == CHARGING) {
-            charge();
-        } else if(stage == DISCHARGING) {
-            discharge();
-        } else {
-            idle();
-        }
-    }
+    /**
+     * Function to tell the hardware to charge the battery.
+     */
+    void Charge();
 
-    void setTemp(float data) {
-        this->m_Temperature = interpolate(m_TemperatureVolts, m_TemperatureValue, data);
-    }
+    /**
+     * Function to tell the hardware to discharge the battery.
+     */
+    void Discharge();
 
-    void setVoltage(float data) {
-        this->m_Voltage = data;
-        this->m_Charge = 100.0f * ( data - LOWEST_VOLTAGE )/( HIGHEST_VOLTAGE - LOWEST_VOLTAGE );
-    }
+    /**
+     * Function to tell the hardware to put the battery in idle mode.
+     */
+    void Idle();
 
-    void setCurrent(float data) {
-        this->m_Current = ( data - this->m_IdleCurrent ) / 0.681f;
-    }
+    /**
+     * Setter for the temperature of the battery. It takes in voltage and converts it to celsius.
+     * @param volt - Voltage value for the temperature of the battery.
+     */
+    void SetTemp(float volt);
 
-    void setIdleCurrent(float data) {
-        this->m_IdleCurrent = data;
-    }
+    /**
+     * Setter for the voltage of the battery.
+     * @param volt - voltage value for the current voltage of the battery.
+     */
+    void SetVoltage(float volt);
 
-    void setStage(int stage) {
-        this->m_CurrentStage = stage;
-    }
+    /**
+     * Setter for the current of the battery.
+     * @param current - current value for the battery.
+     */
+    void SetCurrent(float current);
 
-    void setCompleted(bool completed) {
-        this->m_Completed = completed;
-    }
+    /**
+     * Setter for the idle current of the battery.
+     * @param current - idle current for the battery.
+     */
+    void SetIdleCurrent(float current);
 
-    void setReadyForNext(bool ready) {
-        this->m_ReadyForNext = ready;
-    }
+    /**
+     * Setter for the letter of the battery.
+     * @param letter - character letter to identify the battery.
+     */
+    void SetLetter(const std::string& letter);
 
-    void setArduinoPort(SerialPort& port) {
-        this->m_ArduinoPort = port;
-    }
+    /**
+     * Setter for the SerialPort object used to communicate with hardware.
+     * @param port - SerialPort object.
+     */
+    void SetArduinoPort(SerialPort& port);
 
-    void setLetter(const std::string& letter) {
-        this->m_Letter = letter;
-    }
+    /**
+     * Setter for the ready state of the battery.
+     * @param ready - true if the battery is ready to go to the next state.
+     */
+    void SetReady(bool ready);
 
-    float getTemp() const {
-        return this->m_Temperature;
-    }
+    /**
+     * Setter for the current step in the sequence.
+     * @param index - integer index for the step of the sequence.
+     */
+    void SetCurrentSequenceStep(int index);
 
-    std::string getLetter() const {
-        return this->m_Letter;
-    }
+    /**
+     * Getter for the temperature of the battery.
+     * @return the temperature of the battery in celsius.
+     */
+    float GetTemp() const;
 
-    std::string getStageText() const {
-        if(this->getGeneralStage() == CHARGING) {
-            return "Charging";
-        } else if(this->getGeneralStage() == DISCHARGING) {
-            return "Discharging";
-        } else if(this->getGeneralStage() == IDLE) {
-            return "Idle";
-        } else {
-            return "Complete";
-        }
-    }
+    /**
+     * Getter for the voltage of the battery.
+     * @return the voltage of the battery.
+     */
+    float GetVoltage() const;
 
-    float getVolt() const {
-        return this->m_Voltage;
-    }
+    /**
+     * Getter for the current of the battery.
+     * @return the current of the battery.
+     */
+    float GetCurrent() const;
 
-    float getCurrent() const {
-        return this->m_Current;
-    }
+    /**
+     * Getter for the idle current of the battery.
+     * @return the idle current of the battery.
+     */
+    float GetIdleCurrent() const;
 
-    float getIdleCurrent() const {
-        return this->m_IdleCurrent;
-    }
-
-    float getCharge() const {
-        return this->m_Charge;
-    }
-
-    int getState() const {
-        return this->m_CurrentStage;
-    }
-
-    bool isCompleted() const {
-        return this->m_Completed;
-    }
-
-    bool isReadyForNext() const {
-        return this->m_ReadyForNext;
-    }
+    /**
+     * Getter for the letter of the battery.
+     * @return the letter of the battery used as an identifier.
+     */
+    std::string GetLetter() const;
 
 private:
-    int m_CurrentStage = IDLE0;
+    /// Sequence for the testing of the battery.
+    int m_Sequence[11] = { IDLE, CHARGING, IDLE, DISCHARGING, IDLE, CHARGING, IDLE, DISCHARGING, IDLE, CHARGING, IDLE };
+    /// Index to determine the current state of the battery.
+    int m_CurrentSequenceStep = 0;
 
+    /// Letter to identify the battery.
     std::string m_Letter;
+    /// SerialPort object used to communicate with the battery test jig hardware.
     SerialPort & m_ArduinoPort;
 
-    float m_Temperature{}, m_Voltage{}, m_Current{}, m_IdleCurrent{}, m_Charge{};
+    /// Temperature of the battery in celsius.
+    float m_Temperature{};
 
-    bool m_Completed = false, m_ReadyForNext  = false;
+    /// Voltage of the battery.
+    float m_Voltage{};
 
+    /// Current of the battery.
+    float m_Current{};
+
+    /// Idle current of the battery.
+    float m_IdleCurrent{};
+
+    /// Boolean to determine whether the battery is ready for the next state.
+    bool m_Ready;
+
+    /// Array containing the celsius values depending on the voltage to interpolate.
     float m_TemperatureValue[8] = { -10, 0, 10, 20, 30, 40, 50, 60 };
+
+    /// Array containing the voltage values to find the respective celsius values by interpolation.
     float m_TemperatureVolts[8] = { 1.766, 1.405, 1.065, 0.779, 0.558, 0.395, 0.280, 0.200 };
 };
