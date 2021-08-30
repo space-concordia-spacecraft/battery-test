@@ -1,6 +1,6 @@
 #include "Utils.h"
 
-float interpolate( float xData[8],float yData[8], float x )
+float Interpolate( float xData[8],float yData[8], float x )
 {
     int index = -1;
 

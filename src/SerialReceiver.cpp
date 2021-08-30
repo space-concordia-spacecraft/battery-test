@@ -4,7 +4,7 @@ SerialReceiver::SerialReceiver(const char* port)
         : m_ArduinoPort(port) {}
 
 void SerialReceiver::SetArduinoPort(const char* port) {
-    m_ArduinoPort.connect(port);
+    m_ArduinoPort.Connect(port);
 }
 
 void SerialReceiver::SetListener(SerialListener* listener) {
@@ -28,7 +28,7 @@ void SerialReceiver::Stop() {
 void SerialReceiver::Run() {
     while (m_Running) {
 
-        if (m_ArduinoPort.isConnected() && m_Listener != nullptr) {
+        if (m_ArduinoPort.IsConnected() && m_Listener != nullptr) {
             // Read next serial line and split at commas
             string serialStr = ReadNext();
             if (serialStr.empty())
@@ -78,7 +78,7 @@ string SerialReceiver::ReadNext() {
             str = next;
             next = "";
         } else {
-            int nBytes = m_ArduinoPort.readSerialPort(tempBuffer, MAX_DATA_LENGTH);
+            int nBytes = m_ArduinoPort.ReadSerialPort(tempBuffer, MAX_DATA_LENGTH);
             str = string(tempBuffer, nBytes);
         }
         str = std::regex_replace(str, std::regex("\\s+"), "");

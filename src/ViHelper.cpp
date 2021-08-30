@@ -1,13 +1,13 @@
 #include "ViHelper.h"
 
-void ViHelper::close() {
-    stopLoad();
+void ViHelper::Close() {
+    StopLoad();
 
     viClose(m_Vi);
     viClose(m_DefaultRM);
 }
 
-void ViHelper::init() {
+void ViHelper::Init() {
     ViChar buffer[VI_FIND_BUFLEN];
     ViRsrc matches = buffer;
     ViUInt32 nmatches;
@@ -17,53 +17,53 @@ void ViHelper::init() {
     viOpen(m_DefaultRM, matches, VI_NULL, VI_NULL, &m_Vi);
 
     viPrintf(m_Vi, ViString(":SOUR:SENS 1\n"));
-    printParameter(":SOUR:SENS?\n");
+    PrintParameter(":SOUR:SENS?\n");
 
     viPrintf(m_Vi, ViString(":SOUR:FUNC:MODE BATT\n"));
-    printParameter(":SOUR:FUNC:MODE?\n");
+    PrintParameter(":SOUR:FUNC:MODE?\n");
 
     viPrintf(m_Vi, ViString(":SOUR:BATT:LEV:IMM 1.6\n"));
-    printParameter(":SOUR:BATT:LEV:IMM?\n");
+    PrintParameter(":SOUR:BATT:LEV:IMM?\n");
 
     viPrintf(m_Vi, ViString(":SOUR:BATT:RANG 4\n"));
-    printParameter(":SOUR:BATT:RANG?\n");
+    PrintParameter(":SOUR:BATT:RANG?\n");
 
     viPrintf(m_Vi, ViString(":SOUR:BATT:VON 3\n"));
-    printParameter(":SOUR:BATT:VON?\n");
+    PrintParameter(":SOUR:BATT:VON?\n");
 
     viPrintf(m_Vi, ViString(":SOUR:BATT:VEN 1\n"));
-    printParameter(":SOUR:BATT:VEN?\n");
+    PrintParameter(":SOUR:BATT:VEN?\n");
 
     viPrintf(m_Vi, ViString(":SOUR:BATT:VST 3\n"));
-    printParameter(":SOUR:BATT:VST?\n");
+    PrintParameter(":SOUR:BATT:VST?\n");
 
     viPrintf(m_Vi, ViString(":SOUR:BATT:CEN 0\n"));
-    printParameter(":SOUR:BATT:CEN?\n");
+    PrintParameter(":SOUR:BATT:CEN?\n");
 
     viPrintf(m_Vi, ViString(":SOUR:BATT:TEN 1\n"));
-    printParameter(":SOUR:BATT:TEN?\n");
+    PrintParameter(":SOUR:BATT:TEN?\n");
 
     viPrintf(m_Vi, ViString(":SOUR:BATT:TIM 10800\n"));
-    printParameter(":SOUR:BATT:TIM?\n");
+    PrintParameter(":SOUR:BATT:TIM?\n");
 }
 
-void ViHelper::printParameter(const char* param, std::ostream& out) const {
+void ViHelper::PrintParameter(const char* param, std::ostream& out) const {
     char buf[256] = { 0 };
     viPrintf(m_Vi, ViString(param));
     viScanf(m_Vi, ViString("%t"), &buf);
     out << buf << std::endl;
 }
 
-void ViHelper::startLoad() const {
+void ViHelper::StartLoad() const {
     viPrintf(m_Vi, ViString(":SOUR:INP:STAT 1\n"));
-    printParameter(":SOUR:INP:STAT?\n");
+    PrintParameter(":SOUR:INP:STAT?\n");
 }
 
-void ViHelper::stopLoad() const {
+void ViHelper::StopLoad() const {
     viPrintf(m_Vi, ViString(":SOUR:INP:STAT 0\n"));
-    printParameter(":SOUR:INP:STAT?\n");
+    PrintParameter(":SOUR:INP:STAT?\n");
 }
 
-void ViHelper::printCapactity(std::ostream& out) const {
-    printParameter(":FETC:CAP?\n", out);
+void ViHelper::PrintCapactity(std::ostream& out) const {
+    PrintParameter(":FETC:CAP?\n", out);
 }

@@ -33,20 +33,20 @@ public:
     void OnReceive(SerialData data) final;
     void UpdateBatteryData(Battery& battery, float temp, float current, float voltage);
     void CheckBattery(Battery& battery,
-                      Battery& secondaryBattery,
-                      std::chrono::steady_clock::time_point& currentMillis,
-                      std::chrono::steady_clock::time_point& currentMillisSecondary);
+                      Battery& secondaryBattery);
 
-    QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelAStage, *m_LabelAElapsed;
-    QLabel *m_LabelBTemp, *m_LabelBCurrent, *m_LabelBVoltage, *m_LabelBStage, *m_LabelBElapsed;
+    QLabel *m_LabelTimeElapsed;
+
+    QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelAStage, *m_LabelAElapsed, *m_LabelAProgress;
+    QLabel *m_LabelBTemp, *m_LabelBCurrent, *m_LabelBVoltage, *m_LabelBStage, *m_LabelBElapsed, *m_LabelBProgress;
 
     void Start();
     void Stop();
     void Run();
 
-    void setIdleDuration(int val);
+    void SetIdleDuration(int val);
 
-    float getJigTemp() const {
+    float GetJigTemp() const {
         return m_JigTemperature;
     }
 
@@ -65,7 +65,7 @@ private:
     SerialData m_LastMeasurements[NUM_SAMPLES_TO_AVERAGE];
     int m_MeasurementCounter = 0;
 
-    static std::string stringifyDuration(std::chrono::seconds input_seconds);
+    static std::string StringifyDuration(std::chrono::seconds input_seconds);
 
     void AverageSerialData(SerialData * data);
 

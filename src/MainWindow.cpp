@@ -40,7 +40,7 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
-void MainWindow::setBatteryMonitor(BatteryMonitor * batteryMonitor) {
+void MainWindow::SetBatteryMonitor(BatteryMonitor * batteryMonitor) {
     m_BatteryMonitor = batteryMonitor;
 }
 
@@ -49,7 +49,7 @@ void MainWindow::OnChangeArduinoPort(int index) {
 }
 
 void MainWindow::OnSpinBoxChanged(int val) {
-    m_BatteryMonitor->setIdleDuration(val);
+    m_BatteryMonitor->SetIdleDuration(val);
 }
 
 void MainWindow::OnClickStart(bool checked) {

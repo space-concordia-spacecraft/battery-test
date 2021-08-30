@@ -12,10 +12,12 @@ void CSVLogger::Init() {
     log << "Battery A Voltage,";
     log << "Battery A Current,";
     log << "Battery A Temperature,";
+    log << "Battery A State,";
 
     log << "Battery B Voltage,";
     log << "Battery B Current,";
     log << "Battery B Temperature,";
+    log << "Battery B State,";
 
     log << "Jig Temperature,";
     log << "Capacity" << std::endl;
@@ -26,15 +28,17 @@ void CSVLogger::Close() {
 }
 
 void CSVLogger::LogState(const Battery& batteryA, const Battery& batteryB, const BatteryMonitor& batteryMonitor, const ViHelper& viHelper) {
-    log << batteryA.getVolt() << ",";
-    log << batteryA.getCurrent() << ",";
-    log << batteryA.getTemp() << ",";
+    log << batteryA.GetVoltage() << ",";
+    log << batteryA.GetCurrent() << ",";
+    log << batteryA.GetTemp() << ",";
+    log << batteryA.GetSequenceStateLabel() << ",";
 
-    log << batteryB.getVolt() << ",";
-    log << batteryB.getCurrent() << ",";
-    log << batteryB.getTemp() << ",";
+    log << batteryB.GetVoltage() << ",";
+    log << batteryB.GetCurrent() << ",";
+    log << batteryB.GetTemp() << ",";
+    log << batteryB.GetSequenceStateLabel() << ",";
 
-    log << batteryMonitor.getJigTemp() << ",";
-    viHelper.printCapactity(log);
+    log << batteryMonitor.GetJigTemp() << ",";
+    viHelper.PrintCapactity(log);
     log << std::endl;
 }

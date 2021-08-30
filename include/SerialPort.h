@@ -20,10 +20,10 @@ public:
 
     ~SerialPort();
 
-    int readSerialPort(char* buffer, unsigned int buf_size);
-    bool writeSerialPort(const char* buffer);
+    int ReadSerialPort(char* buffer, unsigned int buf_size);
+    bool WriteSerialPort(const char* buffer);
 
-    bool isConnected();
-    void disconnect();
-    void connect(const char* port);
+    bool IsConnected();
+    void Disconnect();
+    void Connect(const char* port);
 };

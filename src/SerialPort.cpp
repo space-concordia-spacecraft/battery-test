@@ -5,14 +5,14 @@
 static std::mutex portMutex;
 
 SerialPort::SerialPort(const char* portName) {
-    connect(portName);
+    Connect(portName);
 }
 
 SerialPort::~SerialPort() {
-    disconnect();
+    Disconnect();
 }
 
-int SerialPort::readSerialPort(char* buffer, unsigned int buf_size) {
+int SerialPort::ReadSerialPort(char* buffer, unsigned int buf_size) {
     std::lock_guard guard(portMutex);
     DWORD bytesRead;
     unsigned int toRead = 0;
@@ -30,7 +30,7 @@ int SerialPort::readSerialPort(char* buffer, unsigned int buf_size) {
     return 0;
 }
 
-bool SerialPort::writeSerialPort(const char* buffer) {
+bool SerialPort::WriteSerialPort(const char* buffer) {
     std::lock_guard guard(portMutex);
     DWORD bytesSent;
     DWORD size = std::string(buffer).size();
@@ -42,11 +42,11 @@ bool SerialPort::writeSerialPort(const char* buffer) {
         return true;
 }
 
-bool SerialPort::isConnected() {
+bool SerialPort::IsConnected() {
     return this->connected;
 }
 
-void SerialPort::disconnect() {
+void SerialPort::Disconnect() {
     std::lock_guard guard(portMutex);
     if (this->connected) {
         this->connected = false;
@@ -54,9 +54,9 @@ void SerialPort::disconnect() {
     }
 }
 
-void SerialPort::connect(const char* portName) {
+void SerialPort::Connect(const char* portName) {
     if (connected)
-        disconnect();
+        Disconnect();
     std::lock_guard guard(portMutex);
     this->connected = false;
     this->handler = CreateFileA(static_cast<LPCSTR>(portName),

@@ -2,11 +2,20 @@
 
 Battery::Battery(SerialPort& port): m_ArduinoPort(port) {}
 
-int Battery::GetState() {
+int Battery::GetState() const {
     return m_Sequence[m_CurrentSequenceStep];
 }
 
-std::string Battery::GetSequenceStateLabel() {
+int Battery::GetCurrentSequenceState() {
+    return this->m_CurrentSequenceStep;
+}
+
+std::chrono::seconds Battery::GetStateDuration() {
+    return std::chrono::duration_cast<std::chrono::seconds>(
+            std::chrono::high_resolution_clock::now() - m_StateStartTime);
+}
+
+std::string Battery::GetSequenceStateLabel() const {
     if(m_CurrentSequenceStep == 10)
         return "Complete";
 
@@ -17,10 +26,6 @@ std::string Battery::GetSequenceStateLabel() {
     } else if(this->GetState() == IDLE) {
         return "Idle";
     }
-}
-
-int Battery::GetCurrentSequenceState() {
-    return this->m_CurrentSequenceStep;
 }
 
 void Battery::CompleteState() {
@@ -56,19 +61,19 @@ void Battery::StartStateTest() {
 }
 
 void Battery::Charge() {
-    m_ArduinoPort.writeSerialPort((std::string(COMMAND_CHARGE) + m_Letter + "\n").c_str());
+    m_ArduinoPort.WriteSerialPort((std::string(COMMAND_CHARGE) + m_Letter + "\n").c_str());
 }
 
 void Battery::Discharge() {
-    m_ArduinoPort.writeSerialPort((std::string(COMMAND_DISCHARGE) + m_Letter + "\n").c_str());
+    m_ArduinoPort.WriteSerialPort((std::string(COMMAND_DISCHARGE) + m_Letter + "\n").c_str());
 }
 
 void Battery::Idle() {
-    m_ArduinoPort.writeSerialPort((std::string(COMMAND_IDLE) + m_Letter + "\n").c_str());
+    m_ArduinoPort.WriteSerialPort((std::string(COMMAND_IDLE) + m_Letter + "\n").c_str());
 }
 
 void Battery::SetTemp(float volt) {
-    this->m_Temperature = interpolate(m_TemperatureVolts, m_TemperatureValue, volt);
+    this->m_Temperature = Interpolate(m_TemperatureVolts, m_TemperatureValue, volt);
 }
 
 void Battery::SetVoltage(float volt) {
@@ -97,6 +102,14 @@ void Battery::SetReady(bool ready) {
 
 void Battery::SetCurrentSequenceStep(int index) {
     this->m_CurrentSequenceStep = index;
+}
+
+void Battery::ResetStateStartTime() {
+    m_StateStartTime = std::chrono::high_resolution_clock::now();
+}
+
+std::chrono::steady_clock::time_point Battery::GetStateStartTime() {
+    return m_StateStartTime;
 }
 
 float Battery::GetTemp() const {

@@ -16,7 +16,7 @@ Q_OBJECT
 
 public:
     explicit MainWindow(SerialReceiver* receiver, QWidget* parent = nullptr);
-    void setBatteryMonitor(BatteryMonitor * batteryMonitor);
+    void SetBatteryMonitor(BatteryMonitor * batteryMonitor);
     ~MainWindow() override;
 
 private:

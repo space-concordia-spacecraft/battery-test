@@ -1,6 +1,8 @@
 #pragma once
 
 #include <iostream>
+#include <chrono>
+
 #include "Utils.h"
 #include "SerialPort.h"
 
@@ -41,7 +43,7 @@ public:
      * Getter to obtain the current state of the battery.
      * @return the identifier for the current state of the battery.
      */
-    int GetState();
+    int GetState() const;
 
     /**
      * Getter to get the current sequence state of the battery.
@@ -50,10 +52,16 @@ public:
     int GetCurrentSequenceState();
 
     /**
+     * Getter to obtain the duration of the current state.
+     * @return time elapsed from the beginning of the state to now in seconds.
+     */
+    std::chrono::seconds GetStateDuration();
+
+    /**
      * Getter to get a label depending on the state of the battery.
      * @return Current state of the battery in String format.
      */
-    std::string GetSequenceStateLabel();
+    std::string GetSequenceStateLabel() const;
 
     /**
      * Updates the current state of the battery.
@@ -141,6 +149,17 @@ public:
     void SetCurrentSequenceStep(int index);
 
     /**
+     * Resets the current state start time.
+     */
+    void ResetStateStartTime();
+
+    /**
+     * Returns the state start time.
+     * @return time point of the state start time.
+     */
+    std::chrono::steady_clock::time_point GetStateStartTime();
+
+    /**
      * Getter for the temperature of the battery.
      * @return the temperature of the battery in celsius.
      */
@@ -173,11 +192,16 @@ public:
 private:
     /// Sequence for the testing of the battery.
     int m_Sequence[11] = { IDLE, CHARGING, IDLE, DISCHARGING, IDLE, CHARGING, IDLE, DISCHARGING, IDLE, CHARGING, IDLE };
+
     /// Index to determine the current state of the battery.
     int m_CurrentSequenceStep = 0;
 
+    /// Start time for the state.
+    std::chrono::steady_clock::time_point m_StateStartTime = std::chrono::high_resolution_clock::now();
+
     /// Letter to identify the battery.
     std::string m_Letter;
+
     /// SerialPort object used to communicate with the battery test jig hardware.
     SerialPort & m_ArduinoPort;
 
