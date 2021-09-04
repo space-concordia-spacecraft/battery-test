@@ -4,20 +4,21 @@ BatteryMonitor::BatteryMonitor(MainWindow& w, SerialPort& port)
         : m_Window(w), m_ArduinoPort(port), m_BatteryA(port), m_BatteryB(port) {
 
     m_LabelTimeElapsed = m_Window.findChild<QLabel*>("time_elapsed");
+    m_LabelProgress = m_Window.findChild<QLabel*>("progress");
 
     // Sets the labels for each of the data points in the battery
     m_LabelAVoltage = m_Window.findChild<QLabel*>("cell_a_voltage");
     m_LabelACurrent = m_Window.findChild<QLabel*>("cell_a_current");
     m_LabelATemp = m_Window.findChild<QLabel*>("cell_a_temperature");
     m_LabelAProgress = m_Window.findChild<QLabel*>("cell_a_progress");
-    m_LabelAStage = m_Window.findChild<QLabel*>("cell_a_state");
+    m_LabelAStage = m_Window.findChild<QLabel*>("cell_a_stage");
     m_LabelAElapsed = m_Window.findChild<QLabel*>("cell_a_elapsed");
 
     m_LabelBVoltage = m_Window.findChild<QLabel*>("cell_b_voltage");
     m_LabelBCurrent = m_Window.findChild<QLabel*>("cell_b_current");
     m_LabelBTemp = m_Window.findChild<QLabel*>("cell_b_temperature");
     m_LabelBProgress = m_Window.findChild<QLabel*>("cell_b_progress");
-    m_LabelBStage = m_Window.findChild<QLabel*>("cell_b_state");
+    m_LabelBStage = m_Window.findChild<QLabel*>("cell_b_stage");
     m_LabelBElapsed = m_Window.findChild<QLabel*>("cell_b_elapsed");
 
     // Sets the arduino port for each battery so that they can communicate with the hardware
@@ -57,14 +58,16 @@ void BatteryMonitor::OnReceive(SerialData data) {
         m_LabelAVoltage->setText(QString::number(m_BatteryA.GetVoltage(), 'g', precision) + " V");
         m_LabelATemp->setText(QString::number(m_BatteryA.GetTemp(), 'g', precision) + " °C");
         m_LabelACurrent->setText(QString::number(m_BatteryA.GetCurrent(), 'g', precision) + " A");
-        m_LabelAProgress->setText(QString::number(((m_BatteryA.GetCurrentSequenceState() + 1) / 11), 'g', precision) + " %");
+        m_LabelAProgress->setText(QString::number(((m_BatteryA.GetCurrentSequenceState() + 1.0f) / 2), 'g', precision) + "/5");
         m_LabelAStage->setText(QString::fromStdString(m_BatteryA.GetSequenceStateLabel()));
 
         m_LabelBVoltage->setText(QString::number(m_BatteryB.GetVoltage(), 'g', precision) + " V");
         m_LabelBTemp->setText(QString::number(m_BatteryB.GetTemp(), 'g', precision) + " °C");
         m_LabelBCurrent->setText(QString::number(m_BatteryB.GetCurrent(), 'g', precision) + " A");
-        m_LabelBProgress->setText(QString::number(((m_BatteryB.GetCurrentSequenceState() + 1) / 11), 'g', precision) + " %");
+        m_LabelBProgress->setText(QString::number(((m_BatteryB.GetCurrentSequenceState() + 1.0f) / 2), 'g', precision) + "/5");
         m_LabelBStage->setText(QString::fromStdString(m_BatteryB.GetSequenceStateLabel()));
+
+        m_LabelProgress->setText(QString::number(((m_BatteryA.GetCurrentSequenceState() + m_BatteryB.GetCurrentSequenceState()) / 20.0f * 100.0f), 'g', precision) + " %");
     }
 
     m_MeasurementCounter = (m_MeasurementCounter + 1) % NUM_SAMPLES_TO_AVERAGE;
@@ -200,6 +203,8 @@ void BatteryMonitor::Run() {
 void BatteryMonitor::CheckBattery(Battery& battery,
                                   Battery& secondaryBattery) {
 
+
+
     if (battery.GetState() == Battery::CHARGING &&
         (std::abs(battery.GetCurrent()) <= Battery::LOWEST_CURRENT ||
         battery.GetVoltage() >= Battery::HIGHEST_VOLTAGE) &&
@@ -211,7 +216,7 @@ void BatteryMonitor::CheckBattery(Battery& battery,
         std::cout << "UPDATE: Battery " << battery.GetLetter() << " is now " << battery.GetSequenceStateLabel() << "." << std::endl;
 
     } else if ( battery.GetState() == Battery::DISCHARGING &&
-                battery.GetVoltage() <= Battery::LOWEST_VOLTAGE &&
+              ( battery.GetVoltage() <= Battery::LOWEST_VOLTAGE || battery.GetCurrent() < 0 ) &&
                 battery.GetStateDuration().count() >= 5) {
 
         m_Vi.StopLoad();

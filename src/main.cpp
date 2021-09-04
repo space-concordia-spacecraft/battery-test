@@ -12,12 +12,12 @@ int main(int argc, char** argv) {
     MainWindow w(&receiver);
     w.show();
 
-    BatteryMonitor batteryMonitor(w, receiver.getArduinoPort());
+    BatteryMonitor batteryMonitor(w, receiver.GetArduinoPort());
 
     receiver.SetListener(&batteryMonitor);
     receiver.Start();
 
-    w.setBatteryMonitor(&batteryMonitor);
+    w.SetBatteryMonitor(&batteryMonitor);
 
     QApplication::exec();
 

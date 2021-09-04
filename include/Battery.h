@@ -49,13 +49,13 @@ public:
      * Getter to get the current sequence state of the battery.
      * @return the index of how far it is in the testing sequence.
      */
-    int GetCurrentSequenceState();
+    int GetCurrentSequenceState() const;
 
     /**
      * Getter to obtain the duration of the current state.
      * @return time elapsed from the beginning of the state to now in seconds.
      */
-    std::chrono::seconds GetStateDuration();
+    std::chrono::seconds GetStateDuration() const;
 
     /**
      * Getter to get a label depending on the state of the battery.
@@ -218,7 +218,7 @@ private:
     float m_IdleCurrent{};
 
     /// Boolean to determine whether the battery is ready for the next state.
-    bool m_Ready;
+    bool m_Ready = false;
 
     /// Array containing the celsius values depending on the voltage to interpolate.
     float m_TemperatureValue[8] = { -10, 0, 10, 20, 30, 40, 50, 60 };

@@ -57,6 +57,7 @@ void SerialPort::Disconnect() {
 void SerialPort::Connect(const char* portName) {
     if (connected)
         Disconnect();
+
     std::lock_guard guard(portMutex);
     this->connected = false;
     this->handler = CreateFileA(static_cast<LPCSTR>(portName),

@@ -6,11 +6,11 @@ int Battery::GetState() const {
     return m_Sequence[m_CurrentSequenceStep];
 }
 
-int Battery::GetCurrentSequenceState() {
+int Battery::GetCurrentSequenceState() const {
     return this->m_CurrentSequenceStep;
 }
 
-std::chrono::seconds Battery::GetStateDuration() {
+std::chrono::seconds Battery::GetStateDuration() const {
     return std::chrono::duration_cast<std::chrono::seconds>(
             std::chrono::high_resolution_clock::now() - m_StateStartTime);
 }

@@ -1,4 +1,6 @@
 #include "SerialReceiver.h"
+#include "../include/SerialReceiver.h"
+
 
 SerialReceiver::SerialReceiver(const char* port)
         : m_ArduinoPort(port) {}
@@ -11,7 +13,7 @@ void SerialReceiver::SetListener(SerialListener* listener) {
     m_Listener = listener;
 }
 
-SerialPort& SerialReceiver::getArduinoPort() {
+SerialPort& SerialReceiver::GetArduinoPort() {
     return this->m_ArduinoPort;
 }
 

@@ -35,7 +35,7 @@ public:
     void CheckBattery(Battery& battery,
                       Battery& secondaryBattery);
 
-    QLabel *m_LabelTimeElapsed;
+    QLabel *m_LabelTimeElapsed, *m_LabelProgress;
 
     QLabel *m_LabelATemp, *m_LabelACurrent, *m_LabelAVoltage, *m_LabelAStage, *m_LabelAElapsed, *m_LabelAProgress;
     QLabel *m_LabelBTemp, *m_LabelBCurrent, *m_LabelBVoltage, *m_LabelBStage, *m_LabelBElapsed, *m_LabelBProgress;

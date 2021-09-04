@@ -65,5 +65,5 @@ void ViHelper::StopLoad() const {
 }
 
 void ViHelper::PrintCapactity(std::ostream& out) const {
-    PrintParameter(":FETC:CAP?\n", out);
+    PrintParameter(":FETC:CAP?", out);
 }
