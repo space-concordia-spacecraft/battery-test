@@ -61,15 +61,30 @@ void Battery::StartStateTest() {
 }
 
 void Battery::Charge() {
-    m_ArduinoPort.WriteSerialPort((std::string(COMMAND_CHARGE) + m_Letter + "\n").c_str());
+    bool result = m_ArduinoPort.WriteSerialPort((std::string(COMMAND_CHARGE) + m_Letter + "\n").c_str());
+    std::cout << "Sending " << std::string(COMMAND_CHARGE) + m_Letter << " to the arduino" << std::endl;
+    if(result)
+        std::cout << "Succesfully started charging the battery" << std::endl;
+    else
+        std::cout << "ERROR: Could not start charging the battery" << std::endl;
 }
 
 void Battery::Discharge() {
-    m_ArduinoPort.WriteSerialPort((std::string(COMMAND_DISCHARGE) + m_Letter + "\n").c_str());
+    bool result = m_ArduinoPort.WriteSerialPort((std::string(COMMAND_DISCHARGE) + m_Letter + "\n").c_str());
+    std::cout << "Sending " << std::string(COMMAND_DISCHARGE) + m_Letter << " to the arduino" << std::endl;
+    if(result)
+        std::cout << "Succesfully started discharging the battery" << std::endl;
+    else
+        std::cout << "ERROR: Could not start discharging the battery" << std::endl;
 }
 
 void Battery::Idle() {
-    m_ArduinoPort.WriteSerialPort((std::string(COMMAND_IDLE) + m_Letter + "\n").c_str());
+    bool result = m_ArduinoPort.WriteSerialPort((std::string(COMMAND_IDLE) + m_Letter + "\n").c_str());
+    std::cout << "Sending " << std::string(COMMAND_IDLE) + m_Letter << " to the arduino" << std::endl;
+    if(result)
+        std::cout << "Succesfully idled the battery" << std::endl;
+    else
+        std::cout << "ERROR: Could not start idle the battery" << std::endl;
 }
 
 void Battery::SetTemp(float volt) {

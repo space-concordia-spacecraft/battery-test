@@ -25,7 +25,7 @@ public:
     const static int IDLE = 2;
 
     /// Lowest voltage allowed for the battery
-    constexpr const static float LOWEST_VOLTAGE = 3.0f;
+    constexpr const static float LOWEST_VOLTAGE = 3.09f;
 
     /// Highest voltage allowed for the battery
     constexpr const static float HIGHEST_VOLTAGE = 4.2f;

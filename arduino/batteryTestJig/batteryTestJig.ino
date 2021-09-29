@@ -63,12 +63,12 @@ void changeCellAState(int state) {
     digitalWrite(PIN_CELL_A_CHARGE, HIGH);
     digitalWrite(PIN_CELL_A_DIR, LOW);    
   } else if(state == DISCHARGE) {
-    digitalWrite(PIN_CELL_A_CHARGE, LOW);
+    digitalWrite(PIN_CELL_A_CHARGE, HIGH);
     digitalWrite(PIN_CELL_A_DIR, HIGH);
     digitalWrite(PIN_BATT_SEL, HIGH);
   } else {
-    digitalWrite(PIN_CELL_A_DIR, LOW);
-    digitalWrite(PIN_CELL_A_CHARGE, LOW);
+    digitalWrite(PIN_CELL_A_CHARGE, HIGH);
+    digitalWrite(PIN_CELL_A_DIR, HIGH);
   }
 }
 
@@ -80,12 +80,12 @@ void changeCellBState(int state) {
     digitalWrite(PIN_CELL_B_CHARGE, HIGH);
     digitalWrite(PIN_CELL_B_DIR, LOW);
   } else if (state == DISCHARGE) {
-    digitalWrite(PIN_CELL_B_CHARGE, LOW);
+    digitalWrite(PIN_CELL_B_CHARGE, HIGH);
     digitalWrite(PIN_CELL_B_DIR, HIGH);
     digitalWrite(PIN_BATT_SEL, LOW);
   } else {
-    digitalWrite(PIN_CELL_B_DIR, LOW);
-    digitalWrite(PIN_CELL_B_CHARGE, LOW);
+    digitalWrite(PIN_CELL_B_CHARGE, HIGH);
+    digitalWrite(PIN_CELL_B_DIR, HIGH);
   }
 }
 
@@ -132,7 +132,7 @@ void loop() {
   // If there is a command available, parse it
   if(Serial.available()){
     String command = Serial.readStringUntil('\n');
-    
+
     if(command.equals("charge_a")){
       changeCellAState(CHARGE);
     } else if(command.equals("charge_b")){

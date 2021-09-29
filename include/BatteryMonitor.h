@@ -31,7 +31,6 @@ public:
     ~BatteryMonitor();
 
     void OnReceive(SerialData data) final;
-    void UpdateBatteryData(Battery& battery, float temp, float current, float voltage);
     void CheckBattery(Battery& battery,
                       Battery& secondaryBattery);
 

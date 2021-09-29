@@ -44,12 +44,26 @@ void BatteryMonitor::OnReceive(SerialData data) {
     m_LastReceived = std::chrono::high_resolution_clock::now();
 
     m_LastMeasurements[m_MeasurementCounter] = data;
+
     if (m_MeasurementCounter == NUM_SAMPLES_TO_AVERAGE - 1) {
         SerialData averageData{};
         AverageSerialData(&averageData);
 
-        UpdateBatteryData(m_BatteryA, averageData.m_CellA_TM, averageData.m_CellA_IM, averageData.m_CellA_VM);
-        UpdateBatteryData(m_BatteryB, averageData.m_CellB_TM, averageData.m_CellB_IM, averageData.m_CellB_VM);
+        if (m_BatteryA.GetState() == Battery::IDLE) {
+            m_BatteryA.SetIdleCurrent(averageData.m_CellA_IM);
+        }
+
+        if (m_BatteryB.GetState() == Battery::IDLE) {
+            m_BatteryB.SetIdleCurrent(averageData.m_CellB_IM);
+        }
+
+        m_BatteryA.SetTemp(averageData.m_CellA_TM);
+        m_BatteryA.SetVoltage(averageData.m_CellA_VM);
+        m_BatteryA.SetCurrent(averageData.m_CellA_IM);
+
+        m_BatteryB.SetTemp(averageData.m_CellB_TM);
+        m_BatteryB.SetVoltage(averageData.m_CellB_VM);
+        m_BatteryB.SetCurrent(averageData.m_CellB_IM);
 
         m_JigTemperature = averageData.m_Jig_TM;
         m_VRef = averageData.m_VRef;
@@ -58,29 +72,19 @@ void BatteryMonitor::OnReceive(SerialData data) {
         m_LabelAVoltage->setText(QString::number(m_BatteryA.GetVoltage(), 'g', precision) + " V");
         m_LabelATemp->setText(QString::number(m_BatteryA.GetTemp(), 'g', precision) + " °C");
         m_LabelACurrent->setText(QString::number(m_BatteryA.GetCurrent(), 'g', precision) + " A");
-        m_LabelAProgress->setText(QString::number(((m_BatteryA.GetCurrentSequenceState() + 1.0f) / 2), 'g', precision) + "/5");
+        m_LabelAProgress->setText(QString::number((m_BatteryA.GetCurrentSequenceState())) + "/10");
         m_LabelAStage->setText(QString::fromStdString(m_BatteryA.GetSequenceStateLabel()));
 
         m_LabelBVoltage->setText(QString::number(m_BatteryB.GetVoltage(), 'g', precision) + " V");
         m_LabelBTemp->setText(QString::number(m_BatteryB.GetTemp(), 'g', precision) + " °C");
         m_LabelBCurrent->setText(QString::number(m_BatteryB.GetCurrent(), 'g', precision) + " A");
-        m_LabelBProgress->setText(QString::number(((m_BatteryB.GetCurrentSequenceState() + 1.0f) / 2), 'g', precision) + "/5");
+        m_LabelBProgress->setText(QString::number((m_BatteryB.GetCurrentSequenceState())) + "/10");
         m_LabelBStage->setText(QString::fromStdString(m_BatteryB.GetSequenceStateLabel()));
 
-        m_LabelProgress->setText(QString::number(((m_BatteryA.GetCurrentSequenceState() + m_BatteryB.GetCurrentSequenceState()) / 20.0f * 100.0f), 'g', precision) + " %");
+        m_LabelProgress->setText(QString::number(((float)(m_BatteryA.GetCurrentSequenceState() + m_BatteryB.GetCurrentSequenceState()) / 20.0f * 100.0f), 'g', precision) + " %");
     }
 
     m_MeasurementCounter = (m_MeasurementCounter + 1) % NUM_SAMPLES_TO_AVERAGE;
-}
-
-void BatteryMonitor::UpdateBatteryData(Battery& battery, float temp, float current, float voltage) {
-    if (battery.GetState() == battery.IDLE) {
-        battery.SetIdleCurrent(current);
-    }
-
-    battery.SetTemp(temp);
-    battery.SetVoltage(voltage);
-    battery.SetCurrent(current);
 }
 
 void BatteryMonitor::AverageSerialData(SerialData* data) {
@@ -105,6 +109,9 @@ void BatteryMonitor::Start() {
 
     // Battery A should start with charging. By default they start in idle.
     m_BatteryA.SetCurrentSequenceStep(1);
+
+    // Restarts Watchdog Timer, otherwise it will never listen to the following commands
+    m_ArduinoPort.WriteSerialPort("ping\n");
 
     // Begins testing.
     m_BatteryA.StartStateTest();
@@ -155,6 +162,7 @@ void BatteryMonitor::Run() {
 
     std::cout << "Running Battery Monitor" << std::endl;
 
+    // pings to the arduino
     m_ArduinoPort.WriteSerialPort("ping\n");
 
     while (m_Running && (!m_BatteryA.IsCompleted() || !m_BatteryB.IsCompleted())) {
@@ -203,8 +211,6 @@ void BatteryMonitor::Run() {
 void BatteryMonitor::CheckBattery(Battery& battery,
                                   Battery& secondaryBattery) {
 
-
-
     if (battery.GetState() == Battery::CHARGING &&
         (std::abs(battery.GetCurrent()) <= Battery::LOWEST_CURRENT ||
         battery.GetVoltage() >= Battery::HIGHEST_VOLTAGE) &&
@@ -213,7 +219,7 @@ void BatteryMonitor::CheckBattery(Battery& battery,
         battery.CompleteState();
         battery.ResetStateStartTime();
 
-        std::cout << "UPDATE: Battery " << battery.GetLetter() << " is now " << battery.GetSequenceStateLabel() << "." << std::endl;
+        std::cout << "UPDATE: Battery " << battery.GetLetter() << " is exiting charge and is now " << battery.GetSequenceStateLabel() << "." << std::endl;
 
     } else if ( battery.GetState() == Battery::DISCHARGING &&
               ( battery.GetVoltage() <= Battery::LOWEST_VOLTAGE || battery.GetCurrent() < 0 ) &&
@@ -224,7 +230,7 @@ void BatteryMonitor::CheckBattery(Battery& battery,
 
         battery.ResetStateStartTime();
 
-        std::cout << "UPDATE: Battery " << battery.GetLetter() << " is now " << battery.GetSequenceStateLabel() << "." << std::endl;
+        std::cout << "UPDATE: Battery " << battery.GetLetter() << " is exiting discharge and is now " << battery.GetSequenceStateLabel() << "." << std::endl;
 
     } else if (battery.GetState() == Battery::IDLE || battery.IsCompleted()) {
         if (battery.GetStateDuration().count() >= m_IdleDuration || battery.IsCompleted()) {
@@ -243,7 +249,6 @@ void BatteryMonitor::CheckBattery(Battery& battery,
             secondaryBattery.SetReady(false);
 
             std::cout << "UPDATE: Battery " << battery.GetLetter() << " is now " << battery.GetSequenceStateLabel() << "." << std::endl;
-
 
             if (battery.GetState() == Battery::DISCHARGING ||
                 secondaryBattery.GetState() == Battery::DISCHARGING) {
