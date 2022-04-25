@@ -100,7 +100,7 @@ void BatteryMonitor::AverageSerialData(SerialData* data) {
 }
 
 void BatteryMonitor::SetIdleDuration(int val) {
-    this->m_IdleDuration = val;
+    m_IdleDuration = val;
 }
 
 void BatteryMonitor::Start() {
@@ -111,7 +111,7 @@ void BatteryMonitor::Start() {
     m_BatteryA.SetCurrentSequenceStep(1);
 
     // Restarts Watchdog Timer, otherwise it will never listen to the following commands
-    m_ArduinoPort.WriteSerialPort("ping\n");
+    m_ArduinoPort.Write("ping\n");
 
     // Begins testing.
     m_BatteryA.StartStateTest();
@@ -163,13 +163,13 @@ void BatteryMonitor::Run() {
     std::cout << "Running Battery Monitor" << std::endl;
 
     // pings to the arduino
-    m_ArduinoPort.WriteSerialPort("ping\n");
+    m_ArduinoPort.Write("ping\n");
 
     while (m_Running && (!m_BatteryA.IsCompleted() || !m_BatteryB.IsCompleted())) {
 
         now = std::chrono::high_resolution_clock::now();
 
-        m_ArduinoPort.WriteSerialPort("ping\n");
+        m_ArduinoPort.Write("ping\n");
 
         if (std::chrono::duration_cast<std::chrono::seconds>(
                 std::chrono::high_resolution_clock::now() - m_LastReceived).count() >= 5) {

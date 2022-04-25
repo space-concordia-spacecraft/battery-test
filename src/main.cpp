@@ -5,7 +5,6 @@
 #include "BatteryMonitor.h"
 
 int main(int argc, char** argv) {
-
     SerialReceiver receiver;
 
     QApplication a(argc, argv);

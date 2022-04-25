@@ -20,8 +20,8 @@ public:
     ~MainWindow() override;
 
 private:
-    Ui::MainWindow* ui;
-    SerialReceiver* m_receiver;
+    Ui::MainWindow* m_Window;
+    SerialReceiver* m_Receiver;
     BatteryMonitor* m_BatteryMonitor;
 
 private slots:

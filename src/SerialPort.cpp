@@ -1,73 +1,81 @@
 #include "SerialPort.h"
 
-#include <iostream>
-
 static std::mutex portMutex;
 
-SerialPort::SerialPort(const char* portName) {
-    Connect(portName);
+std::unique_ptr<SerialPort> SerialPort::Create() {
+#if defined(_WIN32)
+    return std::make_unique<SerialPortWindows>();
+#elif defined(__unix__)
+    return std::make_unique<SerialPortUnix>();
+#endif
 }
 
-SerialPort::~SerialPort() {
-    Disconnect();
+#if defined(_WIN32)
+
+SerialPortWindows::~SerialPortWindows() {
+    SerialPortWindows::Disconnect();
 }
 
-int SerialPort::ReadSerialPort(char* buffer, unsigned int buf_size) {
+int SerialPortWindows::Read(char* buffer, unsigned int buf_size) {
     std::lock_guard guard(portMutex);
     DWORD bytesRead;
     unsigned int toRead = 0;
 
-    ClearCommError(this->handler, &this->errors, &this->status);
+    ClearCommError(m_Handle, &m_Errors, &m_Status);
 
-    if (this->status.cbInQue > 0) {
-        if (this->status.cbInQue > buf_size) {
+    if (m_Status.cbInQue > 0) {
+        if (m_Status.cbInQue > buf_size) {
             toRead = buf_size;
-        } else toRead = this->status.cbInQue;
+        } else {
+            toRead = m_Status.cbInQue;
+        }
     }
 
-    if (ReadFile(this->handler, buffer, toRead, &bytesRead, NULL)) return bytesRead;
+    if (ReadFile(m_Handle, buffer, toRead, &bytesRead, nullptr))
+        return (int)bytesRead;
 
     return 0;
 }
 
-bool SerialPort::WriteSerialPort(const char* buffer) {
+bool SerialPortWindows::Write(const char* buffer) {
     std::lock_guard guard(portMutex);
     DWORD bytesSent;
     DWORD size = std::string(buffer).size();
 
-    if (!WriteFile(this->handler, (void*) buffer, size, &bytesSent, nullptr)) {
-        ClearCommError(this->handler, &this->errors, &this->status);
+    if (!WriteFile(m_Handle, buffer, size, &bytesSent, nullptr)) {
+        ClearCommError(m_Handle, &m_Errors, &m_Status);
         return false;
-    } else
+    } else {
         return true;
-}
-
-bool SerialPort::IsConnected() {
-    return this->connected;
-}
-
-void SerialPort::Disconnect() {
-    std::lock_guard guard(portMutex);
-    if (this->connected) {
-        this->connected = false;
-        CloseHandle(this->handler);
     }
 }
 
-void SerialPort::Connect(const char* portName) {
-    if (connected)
+bool SerialPortWindows::IsConnected() const {
+    return m_Connected;
+}
+
+void SerialPortWindows::Disconnect() {
+    std::lock_guard guard(portMutex);
+    if (m_Connected) {
+        m_Connected = false;
+        CloseHandle(m_Handle);
+    }
+}
+
+void SerialPortWindows::Connect(const char* portName) {
+    if (m_Connected)
         Disconnect();
 
     std::lock_guard guard(portMutex);
-    this->connected = false;
-    this->handler = CreateFileA(static_cast<LPCSTR>(portName),
+    m_Connected = false;
+    m_Handle = CreateFileA(static_cast<LPCSTR>(portName),
                                 GENERIC_READ | GENERIC_WRITE,
                                 0,
-                                NULL,
+                                nullptr,
                                 OPEN_EXISTING,
                                 FILE_ATTRIBUTE_NORMAL,
-                                NULL);
-    if (this->handler == INVALID_HANDLE_VALUE) {
+                                 nullptr);
+    if (m_Handle == INVALID_HANDLE_VALUE) {
         if (GetLastError() == ERROR_FILE_NOT_FOUND) {
             printf("ERROR: Handle was not attached. Reason: %s not available\n", portName);
         } else {
@@ -76,7 +84,7 @@ void SerialPort::Connect(const char* portName) {
     } else {
         DCB dcbSerialParameters = { 0 };
 
-        if (!GetCommState(this->handler, &dcbSerialParameters)) {
+        if (!GetCommState(m_Handle, &dcbSerialParameters)) {
             printf("failed to get current serial parameters");
         } else {
             dcbSerialParameters.BaudRate = CBR_9600;
@@ -85,13 +93,58 @@ void SerialPort::Connect(const char* portName) {
             dcbSerialParameters.Parity = NOPARITY;
             dcbSerialParameters.fDtrControl = DTR_CONTROL_ENABLE;
 
-            if (!SetCommState(handler, &dcbSerialParameters)) {
+            if (!SetCommState(m_Handle, &dcbSerialParameters)) {
                 printf("ALERT: could not set Serial port parameters\n");
             } else {
-                this->connected = true;
-                PurgeComm(this->handler, PURGE_RXCLEAR | PURGE_TXCLEAR);
+                m_Connected = true;
+                PurgeComm(m_Handle, PURGE_RXCLEAR | PURGE_TXCLEAR);
                 Sleep(ARDUINO_WAIT_TIME);
             }
         }
     }
 }
+
+#elif defined(__unix__)
+
+SerialPortUnix::~SerialPortUnix() {
+    SerialPortUnix::Disconnect();
+}
+
+int SerialPortUnix::Read(char* buffer, unsigned int size) {
+    std::lock_guard guard(portMutex);
+    return read(m_Handle, buffer, size);
+}
+
+bool SerialPortUnix::Write(const char* buffer) {
+    std::lock_guard guard(portMutex);
+    size_t bufferSize = std::string(buffer).size();
+    size_t nBytesWritten = write(m_Handle, buffer, bufferSize);
+    return nBytesWritten == bufferSize;
+}
+
+bool SerialPortUnix::IsConnected() const {
+    return m_Connected;
+}
+
+void SerialPortUnix::Disconnect() {
+    std::lock_guard guard(portMutex);
+    if (m_Connected) {
+        close(m_Handle);
+        m_Connected = false;
+    }
+}
+
+void SerialPortUnix::Connect(const char* port) {
+    if (m_Connected)
+        Disconnect();
+
+    std::lock_guard guard(portMutex);
+    m_Handle = open(port, O_RDWR | O_NOCTTY);
+    if (m_Handle == -1) {
+        printf("ERROR: Couldn't open serial connection to port %s.", port);
+        return;
+    }
+    m_Connected = true;
+}
+
+#endif

@@ -23,21 +23,17 @@ static const char * COM_PORTS[] = {
         R"(\\.\COM16)",
 };
 
-MainWindow::MainWindow(SerialReceiver* receiver, QWidget* parent) :
-        QMainWindow(parent),
-        ui(new Ui::MainWindow),
-        m_receiver(receiver)
-{
-    ui->setupUi(this);
-    connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(OnChangeArduinoPort(int)));
-    connect(ui->startButton, SIGNAL(clicked(bool)), this, SLOT(OnClickStart(bool)));
-    connect(ui->stopButton, SIGNAL(clicked(bool)), this, SLOT(OnClickStop(bool)));
-    connect(ui->duration, SIGNAL(valueChanged(int)), this, SLOT(OnSpinBoxChanged(int)));
-
+MainWindow::MainWindow(SerialReceiver* receiver, QWidget* parent)
+    : QMainWindow(parent), m_Window(new Ui::MainWindow), m_Receiver(receiver) {
+    m_Window->setupUi(this);
+    connect(m_Window->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(OnChangeArduinoPort(int)));
+    connect(m_Window->startButton, SIGNAL(clicked(bool)), this, SLOT(OnClickStart(bool)));
+    connect(m_Window->stopButton, SIGNAL(clicked(bool)), this, SLOT(OnClickStop(bool)));
+    connect(m_Window->duration, SIGNAL(valueChanged(int)), this, SLOT(OnSpinBoxChanged(int)));
 }
 
 MainWindow::~MainWindow() {
-    delete ui;
+    delete m_Window;
 }
 
 void MainWindow::SetBatteryMonitor(BatteryMonitor * batteryMonitor) {
@@ -45,7 +41,7 @@ void MainWindow::SetBatteryMonitor(BatteryMonitor * batteryMonitor) {
 }
 
 void MainWindow::OnChangeArduinoPort(int index) {
-    m_receiver->SetArduinoPort(COM_PORTS[index]);
+    m_Receiver->SetArduinoPort(COM_PORTS[index]);
 }
 
 void MainWindow::OnSpinBoxChanged(int val) {

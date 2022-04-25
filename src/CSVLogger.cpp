@@ -47,6 +47,6 @@ void CSVLogger::LogState(const Battery& batteryA, const Battery& batteryB, const
     log << batteryB.GetStateDuration() << ",";
 
     log << batteryMonitor.GetJigTemp() << ",";
-    viHelper.PrintCapactity(log);
+    viHelper.PrintCapacity(log);
     log << std::endl;
 }

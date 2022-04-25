@@ -72,13 +72,13 @@ public:
      * Function to determine whether or not the battery has completed the testing sequence.
      * @return true if battery completed the full sequence.
      */
-    bool IsCompleted();
+    bool IsCompleted() const;
 
     /**
      * Function to determine whether the battery is ready to go to the next state.
      * @return true if the battery is ready to go to the next state.
      */
-    bool IsReady();
+    bool IsReady() const;
 
     /**
      * Function to start testing the battery depending on the state of the battery.

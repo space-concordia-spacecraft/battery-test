@@ -55,7 +55,7 @@ public:
     void Run();
 
 private:
-    SerialPort m_ArduinoPort;
+    std::unique_ptr<SerialPort> m_ArduinoPort;
     SerialListener * m_Listener = nullptr;
     thread m_Thread;
     volatile bool m_Running = false;

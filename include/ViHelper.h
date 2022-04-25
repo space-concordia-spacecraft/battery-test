@@ -15,7 +15,7 @@ public:
 
     void PrintParameter(const char* param, std::ostream& out = std::cout) const;
 
-    void PrintCapactity(std::ostream& out = std::cout) const;
+    void PrintCapacity(std::ostream& out = std::cout) const;
 
 private:
     ViSession m_Vi, m_DefaultRM;
