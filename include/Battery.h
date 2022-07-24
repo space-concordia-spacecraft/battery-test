@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <chrono>
+#include <vector>
 
 #include "Utils.h"
 #include "SerialPort.h"
@@ -191,7 +192,7 @@ public:
 
 private:
     /// Sequence for the testing of the battery.
-    int m_Sequence[11] = { IDLE, CHARGING, IDLE, DISCHARGING, IDLE, CHARGING, IDLE, DISCHARGING, IDLE, CHARGING, IDLE };
+    std::vector<int> m_Sequence = { IDLE, CHARGING, IDLE, DISCHARGING, IDLE, CHARGING, IDLE, DISCHARGING, IDLE, CHARGING, IDLE, DISCHARGING, IDLE, CHARGING, IDLE };
 
     /// Index to determine the current state of the battery.
     int m_CurrentSequenceStep = 0;

@@ -16,7 +16,7 @@ std::chrono::seconds Battery::GetStateDuration() const {
 }
 
 std::string Battery::GetSequenceStateLabel() const {
-    if(m_CurrentSequenceStep == 10)
+    if(m_CurrentSequenceStep == m_Sequence.size() - 1)
         return "Complete";
 
     if(this->GetState() == CHARGING) {
@@ -31,7 +31,7 @@ std::string Battery::GetSequenceStateLabel() const {
 void Battery::CompleteState() {
     m_CurrentSequenceStep ++;
 
-    if(m_CurrentSequenceStep == 10) {
+    if(m_CurrentSequenceStep == m_Sequence.size() - 1) {
         std::cout << "UPDATE: Test Completed" << std::endl;
     }
 
@@ -39,7 +39,7 @@ void Battery::CompleteState() {
 }
 
 bool Battery::IsCompleted() {
-    return m_CurrentSequenceStep == 10;
+    return m_CurrentSequenceStep == m_Sequence.size() - 1;
 }
 
 bool Battery::IsReady() {
