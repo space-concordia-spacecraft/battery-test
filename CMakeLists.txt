@@ -1,31 +1,32 @@
-# CMAKE Minimum Version
+# Minimum Version
 cmake_minimum_required(VERSION 3.17)
 
 # Project name
-project("Battery Test")
+project(Zeus)
 
-# Specify the C++ standard
+# C++ standard
 set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# Automake Qt files and add build dir as include
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-set(CMAKE_AUTOUIC ON)
-set(Qt5_USE_STATIC_LIBS ON)
-set(Qt5_USE_STATIC_RUNTIME ON)
+# Includes
+include(build/include/utils.cmake)
 
-# Find the required library packages
-find_package(Qt5 COMPONENTS Core Gui Widgets REQUIRED)
+# Required libraries
+find_package(glfw3 CONFIG REQUIRED)
+find_package(glad REQUIRED)
+find_package(imgui CONFIG REQUIRED)
+find_package(imguizmo CONFIG REQUIRED)
+find_package(implot CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
+find_package(spdlog REQUIRED)
 
-# Clump source files
-file(GLOB BATTERY_SRC "include/*.h" "src/*.cpp" "src/*.ui")
+# Clump source files from src
+file(GLOB_RECURSE ZEUS_SRC "include/**.h" "src/**.cpp")
 
-# Add the source code to this project's executable.
-add_executable("Battery" ${BATTERY_SRC})
+# Create executable from source
+add_executable("Zeus" ${ZEUS_SRC})
 
-# Link the needed libraries along with the executable
-target_link_directories("Battery" PRIVATE "C:\\Program Files\\IVI Foundation\\VISA\\Win64\\Lib_x64\\msc")
-target_include_directories("Battery" PRIVATE include ${CMAKE_CURRENT_BINARY_DIR} "C:\\Program Files\\IVI Foundation\\VISA\\Win64\\Include")
-target_link_libraries("Battery" PRIVATE Qt5::Core Qt5::Gui Qt5::Widgets visa64)
+# Link target
+target_link_libraries("Zeus" PUBLIC glfw glad::glad imgui::imgui imguizmo::imguizmo implot::implot glm::glm spdlog::spdlog_header_only)
+target_include_directories("Zeus" PUBLIC include ${STB_INCLUDE_DIRS})
+target_precompile_headers("Zeus" PUBLIC include/pch.h)
