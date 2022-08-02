@@ -28,7 +28,7 @@ namespace zeus {
             return "Idle";
         }
 
-        return "Its fucked";
+        return "It's fucked";
     }
 
     void Battery::CompleteState() {
@@ -66,26 +66,32 @@ namespace zeus {
     void Battery::Charge() {
         bool result = m_ArduinoPort.WriteSerialPort((std::string(COMMAND_CHARGE) + m_Letter + "\n").c_str());
         std::cout << "Sending " << std::string(COMMAND_CHARGE) + m_Letter << " to the arduino" << std::endl;
-        if(result)
-            std::cout << "Succesfully started charging the battery" << std::endl;
-        else
+        if(result) {
+            this->ChargeCyclesCompleted++;
+            std::cout << "Successfully started charging the battery" << std::endl;
+        }
+        else {
             std::cout << "ERROR: Could not start charging the battery" << std::endl;
+        }
     }
 
     void Battery::Discharge() {
         bool result = m_ArduinoPort.WriteSerialPort((std::string(COMMAND_DISCHARGE) + m_Letter + "\n").c_str());
         std::cout << "Sending " << std::string(COMMAND_DISCHARGE) + m_Letter << " to the arduino" << std::endl;
-        if(result)
-            std::cout << "Succesfully started discharging the battery" << std::endl;
-        else
+        if(result) {
+            this->DischargeCyclesCompleted++;
+            std::cout << "Successfully started discharging the battery" << std::endl;
+        }
+        else {
             std::cout << "ERROR: Could not start discharging the battery" << std::endl;
+        }
     }
 
     void Battery::Idle() {
         bool result = m_ArduinoPort.WriteSerialPort((std::string(COMMAND_IDLE) + m_Letter + "\n").c_str());
         std::cout << "Sending " << std::string(COMMAND_IDLE) + m_Letter << " to the arduino" << std::endl;
         if(result)
-            std::cout << "Succesfully idled the battery" << std::endl;
+            std::cout << "Successfully idled the battery" << std::endl;
         else
             std::cout << "ERROR: Could not start idle the battery" << std::endl;
     }
@@ -149,5 +155,4 @@ namespace zeus {
     std::string Battery::GetLetter() const {
         return this->m_Letter;
     }
-
 }

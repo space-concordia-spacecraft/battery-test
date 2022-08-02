@@ -10,8 +10,9 @@
 namespace zeus {
 
     class BatteryMonitor : public zeus::SerialListener {
-
     public:
+        Battery m_BatteryA, m_BatteryB;
+
         //!
         //! \param name
         explicit BatteryMonitor(SerialPort & port);
@@ -41,7 +42,6 @@ namespace zeus {
 
     private:
         SerialPort & m_ArduinoPort;
-        Battery m_BatteryA, m_BatteryB;
         CSVLogger m_Logger;
         ViHelper m_Vi;
 

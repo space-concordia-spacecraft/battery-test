@@ -158,7 +158,6 @@ namespace zeus {
 
     void BatteryMonitor::CheckBattery(Battery& battery,
                                       Battery& secondaryBattery) const {
-
         if (battery.GetState() == Battery::CHARGING &&
             (std::abs(battery.GetCurrent()) <= Battery::LOWEST_CURRENT ||
              battery.GetVoltage() >= Battery::HIGHEST_VOLTAGE) &&

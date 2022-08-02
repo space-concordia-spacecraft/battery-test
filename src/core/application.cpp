@@ -1,3 +1,4 @@
+#include <windows/battery_window.h>
 #include "core/application.h"
 
 namespace zeus {
@@ -68,20 +69,6 @@ namespace zeus {
     }
 
     void Application::CreateMenuBar() {
-        if (ImGui::BeginMenuBar()) {
-            if (ImGui::BeginMenu("File")) {
-                if (ImGui::MenuItem("Exit", "Alt+F4"))
-                    glfwSetWindowShouldClose(m_Window, GLFW_TRUE);
-                if (ImGui::BeginMenu("Add Window", "Ctrl+F3")) {
-                    if (ImGui::MenuItem("Battery", nullptr)) {
-                    }
-                    ImGui::EndMenu();
-                }
-
-                ImGui::EndMenu();
-            }
-            ImGui::EndMenuBar();
-        }
     }
 
     void Application::PollEvents() {

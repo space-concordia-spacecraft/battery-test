@@ -35,6 +35,22 @@ namespace zeus {
         /// Lowest current allowed for the battery
         constexpr const static float LOWEST_CURRENT = 0.05f;
 
+        /// Temperature of the battery in celsius.
+        float m_Temperature{};
+
+        /// Voltage of the battery.
+        float m_Voltage{};
+
+        /// Current of the battery.
+        float m_Current{};
+
+        /// Idle current of the battery.
+        float m_IdleCurrent{};
+
+        int ChargeCyclesCompleted{};
+
+        int DischargeCyclesCompleted{};
+
         /**
          * Constructor to initialize a battery object.
          * @param port - SerialPort object used to communicate to the Electronic Load
@@ -207,18 +223,6 @@ namespace zeus {
 
         /// SerialPort object used to communicate with the battery test jig hardware.
         SerialPort &m_ArduinoPort;
-
-        /// Temperature of the battery in celsius.
-        float m_Temperature{};
-
-        /// Voltage of the battery.
-        float m_Voltage{};
-
-        /// Current of the battery.
-        float m_Current{};
-
-        /// Idle current of the battery.
-        float m_IdleCurrent{};
 
         /// Boolean to determine whether the battery is ready for the next state.
         bool m_Ready = false;

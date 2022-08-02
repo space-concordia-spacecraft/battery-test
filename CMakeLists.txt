@@ -24,7 +24,7 @@ find_package(spdlog REQUIRED)
 file(GLOB_RECURSE ZEUS_SRC "include/**.h" "src/**.cpp")
 
 # Create executable from source
-add_executable("Zeus" ${ZEUS_SRC})
+add_executable("Zeus" ${ZEUS_SRC} include/windows/battery_window.h src/windows/battery_window.cpp include/windows/general_window.h src/windows/general_window.cpp)
 
 # Link target
 target_link_directories("Zeus" PRIVATE "C:\\Program Files\\IVI Foundation\\VISA\\Win64\\Lib_x64\\msc")
