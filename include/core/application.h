@@ -8,7 +8,7 @@
 #include <ImGuizmo.h>
 #include <implot.h>
 
-#include "windows/window_battery.h"
+#include "utils/battery_monitor.h"
 
 namespace zeus {
 

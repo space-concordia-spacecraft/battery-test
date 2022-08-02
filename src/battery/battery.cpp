@@ -27,6 +27,8 @@ namespace zeus {
         } else if(this->GetState() == IDLE) {
             return "Idle";
         }
+
+        return "Its fucked";
     }
 
     void Battery::CompleteState() {

@@ -9,22 +9,19 @@
 
 namespace zeus {
 
-    class WindowBattery : public zeus::UIWindow {
+    class BatteryMonitor : public zeus::SerialListener {
 
     public:
         //!
         //! \param name
-        explicit WindowBattery(string name, SerialPort & port);
+        explicit BatteryMonitor(SerialPort & port);
 
         //!
-        ~WindowBattery();
+        ~BatteryMonitor();
 
         //!
         //! \param data
         void OnReceive(SerialData data);
-
-        //!
-        void RenderGUI() override;
 
         //!
         //! \return ZS_SUCCESS if the process was successful. Otherwise returns ZS_ERROR.
@@ -41,10 +38,6 @@ namespace zeus {
         //! \param battery
         //! \param secondaryBattery
         void CheckBattery(Battery& battery, Battery& secondaryBattery) const;
-
-        //!
-        //! \return
-        string GetName() const;
 
     private:
         SerialPort & m_ArduinoPort;
@@ -67,7 +60,5 @@ namespace zeus {
 
         thread m_Thread;
         volatile bool m_Running = false;
-
-        const string m_WindowName;
     };
 }

@@ -18,6 +18,5 @@ namespace zeus {
 
     private:
         std::ofstream log;
-
     };
 }

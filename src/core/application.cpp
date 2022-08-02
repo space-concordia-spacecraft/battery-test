@@ -73,8 +73,7 @@ namespace zeus {
                 if (ImGui::MenuItem("Exit", "Alt+F4"))
                     glfwSetWindowShouldClose(m_Window, GLFW_TRUE);
                 if (ImGui::BeginMenu("Add Window", "Ctrl+F3")) {
-                    if (ImGui::MenuItem("ADCS", nullptr)) {
-                        this->AddWindow(new WindowBattery());
+                    if (ImGui::MenuItem("Battery", nullptr)) {
                     }
                     ImGui::EndMenu();
                 }
@@ -106,8 +105,8 @@ namespace zeus {
         // Set font
         const float fontSize = 24.0f;
         ImGuiIO& io = ImGui::GetIO(); (void)io;
-        io.Fonts->AddFontFromFileTTF("assets/fonts/inconsolata/Inconsolata-Bold.ttf", fontSize);
-        io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/inconsolata/Inconsolata-Regular.ttf", fontSize);
+        //io.Fonts->AddFontFromFileTTF("assets/fonts/inconsolata/Inconsolata-Bold.ttf", fontSize);
+        //io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/inconsolata/Inconsolata-Regular.ttf", fontSize);
 
         // Set dark theme
         ImGui::StyleColorsDark();

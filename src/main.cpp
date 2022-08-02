@@ -1,12 +1,12 @@
 #include <core/application.h>
 #include "utils/serial_receiver.h"
-#include "windows/window_battery.h"
+#include "utils/battery_monitor.h"
 
 int main(int argc, char** argv) {
 
     zeus::SerialReceiver receiver;
 
-    zeus::WindowBattery windowBattery("Window Battery", receiver.GetArduinoPort());
+    zeus::BatteryMonitor windowBattery(receiver.GetArduinoPort());
 
     receiver.SetListener(&windowBattery);
     receiver.Start();

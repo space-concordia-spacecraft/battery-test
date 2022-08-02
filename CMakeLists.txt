@@ -27,6 +27,7 @@ file(GLOB_RECURSE ZEUS_SRC "include/**.h" "src/**.cpp")
 add_executable("Zeus" ${ZEUS_SRC})
 
 # Link target
-target_link_libraries("Zeus" PUBLIC glfw glad::glad imgui::imgui imguizmo::imguizmo implot::implot glm::glm spdlog::spdlog_header_only)
-target_include_directories("Zeus" PUBLIC include ${STB_INCLUDE_DIRS})
+target_link_directories("Zeus" PRIVATE "C:\\Program Files\\IVI Foundation\\VISA\\Win64\\Lib_x64\\msc")
+target_include_directories("Zeus" PUBLIC include ${STB_INCLUDE_DIRS} "C:\\Program Files\\IVI Foundation\\VISA\\Win64\\Include")
+target_link_libraries("Zeus" PUBLIC glfw glad::glad imgui::imgui imguizmo::imguizmo implot::implot glm::glm spdlog::spdlog_header_only visa64)
 target_precompile_headers("Zeus" PUBLIC include/pch.h)

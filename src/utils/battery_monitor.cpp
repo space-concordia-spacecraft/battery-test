@@ -1,10 +1,10 @@
 #pragma once
 
-#include "windows/window_battery.h"
+#include "utils/battery_monitor.h"
 
 namespace zeus {
-    WindowBattery::WindowBattery(string name, SerialPort& port)
-            : m_WindowName(move(name), m_ArduinoPort(port), m_BatteryA(port), m_BatteryB(port)) {
+    BatteryMonitor::BatteryMonitor(SerialPort& port)
+            : m_ArduinoPort(port), m_BatteryA(port), m_BatteryB(port) {
         // Sets the arduino port for each battery so that they can communicate with the hardware
         m_BatteryA.SetArduinoPort(m_ArduinoPort);
         m_BatteryB.SetArduinoPort(m_ArduinoPort);
@@ -17,13 +17,13 @@ namespace zeus {
         m_Vi.Init();
     }
 
-    WindowBattery::~WindowBattery() {
+    BatteryMonitor::~BatteryMonitor() {
         // Closes any services that were open.
         m_Logger.Close();
         m_Vi.Close();
     }
 
-    void WindowBattery::OnReceive(SerialData data) {
+    void BatteryMonitor::OnReceive(SerialData data) {
         // Store results in m_BatteryA and m_BatteryB
         m_LastReceived = std::chrono::high_resolution_clock::now();
         m_LastMeasurements[m_MeasurementCounter] = data;
@@ -54,7 +54,7 @@ namespace zeus {
         m_MeasurementCounter = (m_MeasurementCounter + 1) % NUM_SAMPLES_TO_AVERAGE;
     }
 
-    ZsResult WindowBattery::Start() {
+    ZsResult BatteryMonitor::Start() {
         if (m_Running)
             return ZS_ERROR;
 
@@ -72,14 +72,14 @@ namespace zeus {
         m_Logger.Init();
 
         m_Running = true;
-        m_Thread = thread(&WindowBattery::Run, this);
+        m_Thread = thread(&BatteryMonitor::Run, this);
 
         std::cout << "Starting Battery Monitor" << std::endl;
 
         return ZS_SUCCESS;
     }
 
-    ZsResult WindowBattery::Stop() {
+    ZsResult BatteryMonitor::Stop() {
         if (!m_Running)
             return ZS_ERROR;
 
@@ -102,7 +102,7 @@ namespace zeus {
         return ZS_SUCCESS;
     }
 
-    void WindowBattery::Run() {
+    void BatteryMonitor::Run() {
         // start timer
         auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -145,7 +145,7 @@ namespace zeus {
             now = std::chrono::high_resolution_clock::now();
 
             if (std::chrono::duration_cast<std::chrono::seconds>(now - lastLog).count() >= 10) {
-                m_Logger.LogState(m_BatteryA, m_BatteryB, *this, m_Vi);
+                m_Logger.LogState(m_BatteryA, m_BatteryB, 0.0, m_Vi);
                 lastLog = std::chrono::high_resolution_clock::now();
             }
 
@@ -156,13 +156,7 @@ namespace zeus {
         m_Logger.Close();
     }
 
-    void WindowBattery::RenderGUI() {
-        ImGui::Begin(m_WindowName.c_str());
-        ImGui::Text("%s", m_WindowName.c_str());
-        ImGui::End();
-    }
-
-    void WindowBattery::CheckBattery(Battery& battery,
+    void BatteryMonitor::CheckBattery(Battery& battery,
                                       Battery& secondaryBattery) const {
 
         if (battery.GetState() == Battery::CHARGING &&
@@ -215,7 +209,7 @@ namespace zeus {
         }
     }
 
-    std::string WindowBattery::StringifyDuration(std::chrono::seconds input_seconds) {
+    std::string BatteryMonitor::StringifyDuration(std::chrono::seconds input_seconds) {
         using namespace std::chrono;
         auto h = duration_cast<hours>(input_seconds);
         input_seconds -= h;
@@ -235,7 +229,7 @@ namespace zeus {
         return ss.str();
     }
 
-    void WindowBattery::AverageSerialData(SerialData* data) {
+    void BatteryMonitor::AverageSerialData(SerialData* data) {
         *data = { 0, 0, 0, 0, 0, 0, 0, 0 };
         for (auto& m_LastMeasurement : m_LastMeasurements) {
             for (int j = 0; j < 8; j++) {
@@ -247,11 +241,7 @@ namespace zeus {
         }
     }
 
-    void WindowBattery::SetIdleDuration(int val) {
+    void BatteryMonitor::SetIdleDuration(int val) {
         this->m_IdleDuration = val;
-    }
-
-    string WindowBattery::GetName() const {
-        return m_WindowName;
     }
 }
