@@ -145,7 +145,7 @@ namespace zeus {
             now = std::chrono::high_resolution_clock::now();
 
             if (std::chrono::duration_cast<std::chrono::seconds>(now - lastLog).count() >= 10) {
-                m_Logger.LogState(m_BatteryA, m_BatteryB, 0.0, m_Vi);
+                m_Logger.LogState(std::chrono::duration_cast<std::chrono::seconds>(now - startTime).count(), m_BatteryA, m_BatteryB, 0.0, m_Vi);
                 lastLog = std::chrono::high_resolution_clock::now();
             }
 

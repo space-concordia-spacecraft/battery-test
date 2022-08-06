@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <iostream>
+#include <chrono>
 
 #include "battery/battery.h"
 #include "utils/vi_helper.h"
@@ -13,7 +14,7 @@ namespace zeus {
 
     public:
         void Init();
-        void LogState(const Battery& batteryA, const Battery& batteryB, float jigTemperature, const ViHelper& viHelper);
+        void LogState(long long now, const Battery& batteryA, const Battery& batteryB, float jigTemperature, const ViHelper& viHelper);
         void Close();
 
     private:

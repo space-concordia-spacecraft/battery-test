@@ -9,6 +9,7 @@ namespace zeus {
             return;
         }
 
+        log << "Timestamp,";
         log << "Battery A Voltage,";
         log << "Battery A Current,";
         log << "Battery A Temperature,";
@@ -31,7 +32,8 @@ namespace zeus {
         log.close();
     }
 
-    void CSVLogger::LogState(const Battery& batteryA, const Battery& batteryB, float jigTemperature, const ViHelper& viHelper) {
+    void CSVLogger::LogState(long long now, const Battery& batteryA, const Battery& batteryB, float jigTemperature, const ViHelper& viHelper) {
+        log << now << ",";
         log << batteryA.GetVoltage() << ",";
         log << batteryA.GetCurrent() << ",";
         log << batteryA.GetTemp() << ",";
@@ -47,7 +49,6 @@ namespace zeus {
         log << batteryB.GetStateDuration() << ",";
 
         log << jigTemperature << ",";
-        viHelper.PrintCapactity(log);
-        log << std::endl;
+        viHelper.PrintCapacity(log);
     }
 }

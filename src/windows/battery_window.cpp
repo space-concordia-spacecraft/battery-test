@@ -25,8 +25,7 @@ namespace zeus {
         ImGui::TableNextColumn();
         ImGui::Text("%s", "Time on Step");
         ImGui::TableNextColumn();
-        ImGui::Text("%is", m_Battery.GetStateDuration().count());
-
+        ImGui::Text("%llis", m_Battery.GetStateDuration().count());
 
         ImGui::EndTable();
 

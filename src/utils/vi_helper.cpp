@@ -57,20 +57,15 @@ namespace zeus {
 
     void ViHelper::StartLoad() const {
         viPrintf(m_Vi, ViString(":SOUR:INP:STAT 1\n"));
-
-        viPrintf(m_Vi, ViString(":SOUR:INP:STAT 0\n"));
-        viPrintf(m_Vi, ViString(":SOUR:INP:STAT 1\n"));
         PrintParameter(":SOUR:INP:STAT?\n");
     }
 
     void ViHelper::StopLoad() const {
         viPrintf(m_Vi, ViString(":SOUR:INP:STAT 0\n"));
-        viPrintf(m_Vi, ViString(":SOUR:INP:STAT 1\n"));
-        viPrintf(m_Vi, ViString(":SOUR:INP:STAT 0\n"));
         PrintParameter(":SOUR:INP:STAT?\n");
     }
 
-    void ViHelper::PrintCapactity(std::ostream& out) const {
-        PrintParameter(":FETC:CAP?", out);
+    void ViHelper::PrintCapacity(std::ostream& out) const {
+        PrintParameter(":FETC:CAP?\n", out);
     }
 }
