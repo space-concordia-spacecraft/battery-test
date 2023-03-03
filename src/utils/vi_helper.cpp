@@ -56,7 +56,13 @@ namespace zeus {
     }
 
     void ViHelper::StartLoad() const {
-        viPrintf(m_Vi, ViString(":SOUR:INP:STAT 1\n"));
+        int attempts = 0;
+        bool loadStarted = false;
+
+        do {
+            viPrintf(m_Vi, ViString(":SOUR:INP:STAT 1\n"));
+        } while(attempts <= 3 && !loadStarted)
+
         PrintParameter(":SOUR:INP:STAT?\n");
     }
 
