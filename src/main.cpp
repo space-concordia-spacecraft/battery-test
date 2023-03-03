@@ -1,28 +1,25 @@
-#include <QApplication>
-
-#include "MainWindow.h"
-#include "SerialReceiver.h"
-#include "BatteryMonitor.h"
+#include <core/application.h>
+#include <windows/general_window.h>
+#include "utils/serial_receiver.h"
+#include "utils/battery_monitor.h"
+#include "windows/battery_window.h"
 
 int main(int argc, char** argv) {
+    zeus::SerialReceiver receiver;
 
-    SerialReceiver receiver;
+    zeus::BatteryMonitor windowBattery(receiver.GetArduinoPort());
 
-    QApplication a(argc, argv);
-    MainWindow w(&receiver);
-    w.show();
-
-    BatteryMonitor batteryMonitor(w, receiver.GetArduinoPort());
-
-    receiver.SetListener(&batteryMonitor);
+    receiver.SetListener(&windowBattery);
     receiver.Start();
 
-    w.SetBatteryMonitor(&batteryMonitor);
+    auto* zeus = new zeus::Application();
+    zeus->AddWindow(new zeus::GeneralWindow("General", windowBattery, receiver));
+    zeus->AddWindow(new zeus::BatteryWindow("Battery A", windowBattery.m_BatteryA));
+    zeus->AddWindow(new zeus::BatteryWindow("Battery B", windowBattery.m_BatteryB));
+    zeus->Run();
+    delete zeus;
 
-    QApplication::exec();
-
-    batteryMonitor.Stop();
-
+    windowBattery.Stop();
     receiver.Stop();
 
     return 0;
